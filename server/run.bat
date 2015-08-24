@@ -1,0 +1,1 @@
+nodemon -e js,ejs,jade --exitcrash bin/www.js && pause

@@ -1,0 +1,16 @@
+.panel.panel-default
+  .panel-heading
+    i.fa.fa-camera
+    span.label-fa.label.label-default  Eszközök
+
+  section(ng-controller="CameraListCtrl")
+    .panel-body
+      .list-group  
+        .list-group-item(ng-repeat="cam in cameras track by $index") 
+          a(href="/livestream/{{cam.name}}")
+            .row
+              .col-md-8               
+                .spacing.bold {{ cam.name }}         
+              .col-md-4  
+                span.label.label-success(ng-if="cameraStatus[cam.name]") Online
+                span.label.label-default(ng-if="!cameraStatus[cam.name]") Offline  

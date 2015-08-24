@@ -1,0 +1,54 @@
+extends layout
+
+block content
+  
+  header(data-ng-controller="NavbarController",  ng-cloak, ng-show="isLoggedIn()")   
+    .navbar.navbar-default.navbar-fixed-top(role='navigation')
+        .navbar-header
+            button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
+                span.sr-only Toggle navigation
+                span.icon-bar
+                span.icon-bar
+                span.icon-bar
+        a.navbar-brand(href='#') Sentinel
+        .navbar-collapse.collapse
+          ul.nav.navbar-nav
+            li(ng-class="{ active: isActive('/dashboard')}")
+              a(href='dashboard') 
+                i.fa.fa-dashboard
+                span.label-fa Vezérlőpult
+            li(ng-class="{ active: isActive('/notification')}")
+              a(href='notification')
+                i.fa.fa-bell-o
+                span.label-fa Értesítések
+            li(ng-class="{ active: isActive('/imagelog')}")
+              a(href='imagelog')
+                i.fa.fa-file-archive-o
+                span.label-fa Kamera napló
+            li(ng-class="{ active: isActive('/livestream')}")
+              a(href='livestream') 
+                i.fa.fa-video-camera
+                span.label-fa Élőkép              
+            li(ng-class="{ active: isActive('/config')}")
+              a(href='/config')
+                i.fa.fa-sliders
+                span.label-fa Konfig                     
+              
+          ul.nav.navbar-nav.navbar-right
+            li.dropdown
+              a.dropdown-toggle(data-toggle="dropdown", href="#")
+                i.fa.fa-user.fa-fw
+                i.fa.fa-caret-down.fa-fw
+              ul.dropdown-menu.dropdown-user                
+                li
+                  a(href="#", ng-click="logout()")
+                    i.fa.fa-sign-out.fa-fw
+                    span Kijelentkezés               
+     
+  .spinner
+    span.fa.fa-gear.fa-spin.fa-4x(ng-show="loading")
+  .container(style="padding-top:20px;")
+    toaster-container
+    #system-notifications
+    div(ng-view) 
+        

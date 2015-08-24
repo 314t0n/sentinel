@@ -1,0 +1,156 @@
+h2 Kamera konfigurálás
+.row
+  .col-md-12
+    button.pull-right.btn.btn-danger(ng-if="selectedCamera !== 'all'" ng-click="deleteCameraModal()") 
+      i.fa.fa-fw.fa-ban 
+      span Töröl
+    button.pull-right.btn.btn-info(ng-click="addCameraModal()")
+      i.fa.fa-fw.fa-plus
+      span Felvesz
+    
+// - Template for Add Camera Modal
+script(type='text/ng-template', id='addCameraModal.html')
+  .modal-header
+    h3.modal-title Új kamera felvétele
+  .modal-body
+    form
+      .input-group
+        span.input-group-addon(style="min-width:150px") Kamera azonosító
+        input.form-control(type="text" ng-model="name" placeholder="Azonosító név" required)
+  .modal-footer
+    button.btn.btn-primary(ng-click='ok()') OK
+    button.btn.btn-default(ng-click='cancel()') Mégse
+
+// - Template for Delete Camera Modal
+script(type='text/ng-template', id='deleteCameraModal.html')
+  .modal-header
+    h3.modal-title Kamera törlése
+  .modal-body
+    p Biztosan törli a(z) {{ selectedCamera }} eszközt ?
+  .modal-footer
+    button.btn.btn-primary(ng-click='ok()') OK
+    button.btn.btn-default(ng-click='cancel()') Mégse
+hr
+include camera
+
+section(ng-if="selectedCamera === 'all'")
+  include camera-list
+
+section(ng-if="selectedCamera !== 'all'")
+  .panel.panel-default
+    .panel-heading
+      i.fa.fa-fw.fa-camera
+      span.label-fa.label.label-default  Kamera beállítások   
+
+    section#camera
+      .panel-body     
+     
+        .row
+          .col-md-8
+            label(style="line-height:40px") Státusz
+          .col-md-4
+            toggle-switch.toggle-control( data-toggle="toggle", on-label="Engedélyezve", off-label="Tiltva", ng-model="camera.status" )
+        
+        .row  
+          .col-md-8
+            label(style="line-height:40px") Azonosító
+          .col-md-4
+            input.toggle-control(data-toggle="text" ng-model="camera.id" ng-keyup="$event.keyCode == 13 && save('camera.id', camera.id, 'Azonosító')")
+
+        .row
+          .col-md-8
+            label.text-danger(style="line-height:40px") Karbantartás
+          .col-md-4       
+            button.btn.btn-warning(ng-model="camera.shutdown", ng-click="shutdown()") 
+              i.fa.fa-wrench 
+              span Leállítás       
+
+  h2 Kamera felbontás
+  hr
+  .panel.panel-default
+    .panel-heading
+      i.fa.fa-fw.fa-square-o
+      span.label-fa.label.label-default  Felbontás
+
+    section#res
+      .panel-body         
+        .row
+          .col-md-8
+            label(style="line-height:40px") Szélesség
+          .col-md-4
+            input.toggle-control(type="number"  min="0" max="1920" ng-keyup="$event.keyCode == 13 && save('resolution.x', camera.resolution.x, 'Szélesség')" ng-model="camera.resolution.x" )
+        .row
+          .col-md-8
+            label(style="line-height:40px") Magasság
+          .col-md-4
+            input.toggle-control(type="number" min="0" max="1080"  ng-keyup="$event.keyCode == 13 && save('resolution.y', camera.resolution.y, 'Magasság')" ng-model="camera.resolution.y" )
+
+  h2 Beállítások
+  hr
+  .panel.panel-default
+    .panel-heading
+      i.fa.fa-fw.fa-image
+      span.label-fa.label.label-default  Naplózás
+
+    section#imagelog
+      .panel-body         
+        .row
+          .col-md-8
+            label(style="line-height:40px") Naplózás
+          .col-md-4
+            toggle-switch.toggle-control(on-label="Engedélyezve" ,off-label="Tiltva", ng-model="imagelog.status" )
+
+        .row
+          .col-md-8
+            label(style="line-height:40px") Biztonsági mentés az eszközön 
+          .col-md-4
+            toggle-switch.toggle-control(on-label="Engedélyezve" ,off-label="Tiltva", ng-model="imagelog.storeImage" )
+
+        .row
+          .col-md-8
+            label(style="line-height:40px") Kép készítése (másodperc)
+          .col-md-4
+            input.toggle-control(type="number" min="1" max="86400" ng-model="imagelog.interval" ng-keyup="$event.keyCode == 13 && save('imagelog.interval', imagelog.interval, 'Naplózás esetén kép készítése')") 
+
+        .row
+          .col-md-8
+            label(style="line-height:40px") Képek tárolása az eszközön (nap)
+          .col-md-4
+            input.toggle-control(type="number" min="1" max="3" ng-model="imagelog.storeDays" ng-keyup="$event.keyCode == 13 && save('imagelog.storeDays', imagelog.storeDays, 'Naplózás esetén kép tárolása')")
+
+  .panel.panel-default
+    .panel-heading
+      i.fa.fa-fw.fa-bell
+      span.label-fa.label.label-default  Mozgásérzékelés 
+
+    section#motion-detect
+      .panel-body         
+        .row
+          .col-md-8
+            label(style="line-height:40px") Mozgásérzékelés
+          .col-md-4
+            toggle-switch.toggle-control(on-label="Engedélyezve", off-label="Tiltva", ng-model="motionDetect.status" )
+
+        .row
+          .col-md-8
+            label(style="line-height:40px") Biztonsági mentés az eszközön 
+          .col-md-4
+            toggle-switch.toggle-control(on-label="Engedélyezve", off-label="Tiltva", ng-model="motionDetect.storeImage" )
+
+        .row
+          .col-md-8
+            label(style="line-height:40px") Érzékenység (másodperc)
+          .col-md-4
+            input.toggle-control(type="number", min="0" ng-model="motionDetect.sensitivy" ng-keyup="$event.keyCode == 13 && save('motionDetect.sensitivy', motionDetect.sensitivy, 'Mozgás érzékelés érzékenység')")
+
+        .row
+          .col-md-8         
+            label(style="line-height:40px") Küszöb érték (pixel)
+          .col-md-4
+            input.toggle-control(type="number" min="0" max="2073600" ng-model="motionDetect.threshold" ng-keyup="$event.keyCode == 13 && save('motionDetect.threshold', motionDetect.threshold, 'Mozgás érzékelés küszöbérték')")
+              
+        .row
+          .col-md-8
+            label(style="line-height:40px") Képek tárolása az eszközön (nap)
+          .col-md-4
+            input.toggle-control(type="number" min="1" max="3" ng-model="motionDetect.storeDays" ng-keyup="$event.keyCode == 13 && save('motionDetect.storeDays', motionDetect.storeDays, 'Mozgás érzékelés esetén kép tárolása')") 

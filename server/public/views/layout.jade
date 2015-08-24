@@ -1,0 +1,67 @@
+doctype html
+html
+  head
+    title=title  
+    base(href=baseUrl).
+    script.
+        var config = {};
+        config.baseUrl = "!{baseUrl}";
+    meta(charset='utf-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge') 
+    meta(name='description', content='Sentinel motion detector service')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    link(rel='stylesheet', href='/bower_components/bootstrap/dist/css/bootstrap.min.css')
+    //-link(rel='stylesheet', href='/font-awesome/css/font-awesome.min.css')    
+    link(rel='stylesheet', href='//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css')    
+    link(rel='stylesheet', href='/css/sb-admin-2.css')    
+    link(rel='stylesheet', href='/css/style.css')   
+    link(rel='stylesheet', href='/css/bootstrap.css')      
+    link(rel='stylesheet', href='/bower_components/bootstrap-select/dist/css/bootstrap-select.min.css')      
+    link(rel='stylesheet', href='/bower_components/angular-bootstrap-datetimepicker/src/css/datetimepicker.css')   
+    link(rel='stylesheet', href='/bower_components/bootstrap-toggle/css/bootstrap-toggle.min.css')   
+    link(rel='stylesheet', href='/bower_components/angular-toggle-switch/angular-toggle-switch.css')   
+    link(rel='stylesheet', href='/bower_components/angularjs-toaster/toaster.css')  
+    link(rel='stylesheet', href='/bower_components/angular-bootstrap-lightbox/dist/angular-bootstrap-lightbox.min.css')  
+    link(rel='stylesheet', href='/bower_components/angular-loading-bar/build/loading-bar.min.css')  
+   
+    body 
+    block content
+
+    // - Libaries
+    
+    script(src='/socket.io/socket.io.js')
+    script(src='/bower_components/jquery/dist/jquery.min.js')   
+    script(src='/bower_components/angular/angular.js')  
+    script(src='/bower_components/angular-route/angular-route.js')  
+    script(src='/bower_components/angular-resource/angular-resource.js')  
+    script(src='/bower_components/ngstorage/ngstorage.min.js')  
+  
+    script(src='/bower_components/humanize-duration/humanize-duration.js')   
+    script(src='/bower_components/angular-timer/dist/angular-timer.min.js')   
+    script(src='/bower_components/angular-animate/angular-animate.min.js')   
+    script(src='/bower_components/angularjs-toaster/toaster.js')   
+    script(src='/bower_components/angular-bootstrap/ui-bootstrap-tpls.js')   
+    script(src='/bower_components/spin.js/spin.js')   
+    script(src='/bower_components/angular-spinner/angular-spinner.js')   
+    script(src='/bower_components/bootstrap/dist/js/bootstrap.min.js')
+    script(src='/bower_components/angular/angular.js')
+    script(src='/bower_components/angular-load/angular-load.js')        
+ 
+    script(src='/bower_components/angular-bootstrap-lightbox/dist/angular-bootstrap-lightbox.js')    
+    script(src='/bower_components/angular-loading-bar/build/loading-bar.min.js')    
+    script(src='/bower_components/angular-touch/angular-touch.min.js')    
+    script(src='/bower_components/moment/min/moment.min.js')      
+    script(src='/bower_components/moment/locale/hu.js')
+    script(src='/bower_components/angular-bootstrap-datetimepicker/src/js/datetimepicker.js')
+    script(src='/bower_components/bootstrap-select/dist/js/bootstrap-select.min.js')
+    script(src='/bower_components/bootstrap-toggle/js/bootstrap-toggle.js')
+    script(src='/bower_components/angular-toggle-switch/angular-toggle-switch.js')
+    script(src='/bower_components/d3/d3.min.js')
+    script(src='/bower_components/pie-chart/dist/pie-chart.js')
+
+    // - App      
+
+    script(src='/js/lib/require.js', data-main="/js/app/config")
+
+ 
+    

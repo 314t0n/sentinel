@@ -1,0 +1,17 @@
+// Lightbox template
+.modal-body(ng-swipe-left='Lightbox.nextImage()', ng-swipe-right='Lightbox.prevImage()')
+  // navigation
+  .lightbox-nav
+    // close button
+    button.close(aria-hidden='true', ng-click='$dismiss()') ×
+    .btn-group
+      a.btn.btn-xs.btn-default(ng-click='Lightbox.prevImage()')
+        | ‹ Előző
+      a.btn.btn-xs.btn-default(ng-click='Lightbox.nextImage()')
+        | Következő ›
+  .lightbox-image-container
+    // caption
+    .lightbox-image-caption
+      span {{Lightbox.imageCaption}}
+    // image
+    img(lightbox-src='{{Lightbox.imageUrl}}', alt='')

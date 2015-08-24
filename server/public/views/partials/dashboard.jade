@@ -1,0 +1,52 @@
+h3 Vezérlőpult
+hr
+
+.row
+  .col-md-4
+    include notification-widget
+
+  .col-md-8
+    include camera-list
+
+  .col-md-6
+    .panel.panel-default
+      .panel-heading
+        i#notification-marker.fa.fa-image-o
+        span.label-fa.label.label-default  Értesítések
+
+      section(ng-controller="NotificationContentCtrl")
+        .panel-body
+          .list-group    
+            .list-group-item(ng-repeat="n in filteredNotifications track by $index | orderBy:'date':true | limitTo:6 " ng-class="{unread: n.isUnread}")  
+              .row
+                .col-md-7
+                  i(class="{{n.class}}")
+                  span.spacing {{n.message}}.  
+                .col-md-4  
+                  a(ng-if="n.showImg" ng-click="openLightboxModal($index)")                 
+                    img.log-image.img-thumbnail(src="data:image/jpg;base64,{{n.image}}") 
+                .col-md-1
+                  i(ng-if="n.isUnread" ng-click="markNotification(n)" style="cursor: pointer").fa.fa-fw.fa-times-circle-o.pull-right                 
+              .row       
+                .col-md-12                  
+                  span.pull-left.text-muted.small {{n.date | dateFilter}}  
+          
+
+          a.btn.btn-default.btn-block(href="notification") Értesítések megtekintése
+
+  .col-md-6            
+    .panel.panel-default           
+      .panel-heading
+        i#imagelog-marker.fa.fa-image-o
+        span.label-fa.label.label-default  Kamera napló    
+
+
+      section(ng-controller="ImageLogContentCtrl")
+        .panel-body
+          .list-group      
+            .list-group-item(data-ng-animate="'custom'" ng-repeat="p in filteredImagelogs track by $index | orderBy:'date':true | limitTo:6 ")  
+               [{{ p.cam }}] 
+               a(ng-click="openLightboxModal($index)")             
+                img.log-image.img-thumbnail(src="data:image/jpg;base64,{{p.image}}")
+                .pull-right.text-muted.small {{p.date | dateFilter}}    
+          a.btn.btn-default.btn-block(href="imagelog") Kamera napló megtekintése

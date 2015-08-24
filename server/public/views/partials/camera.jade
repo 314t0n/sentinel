@@ -1,0 +1,26 @@
+.row
+  .col-lg-5
+    section#camera(ng-controller="CameraCtrl")
+      .panel.panel-primary
+        .panel-heading
+          .row(style="height: 116px")
+            .col-xs-3
+              i.fa.fa-camera.fa-5x
+            .col-xs-9.text-right 
+              select.form-control.selectpicker(style="margin-top:15px" ng-model="selectedCamera" ng-change="update()" ng-options="cam as cam.name for cam in cameras")  
+        a(href="/config" ng-if="selectedCamera.name !== 'Mind'")
+          .panel-footer           
+              span.pull-left Státusz:               
+                  span.label.label-success(ng-if="cameraStatus") Online         
+                  span.label.label-default(ng-if="!cameraStatus") Offline
+              span.pull-right Beállítások 
+                i.fa.fa-arrow-circle-right
+              .clearfix
+        .panel-footer(ng-if="selectedCamera.name === 'Mind'") 
+        div(ng-if="selectedCamera.name === 'Mind'")
+          .panel-footer 
+      
+  .col-lg-3       
+    include notification-widget
+  .col-lg-4       
+    include sizechart-widget    

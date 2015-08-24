@@ -1,0 +1,12 @@
+section(ng-controller="SizeChartWidgetCtrl")
+  .panel.panel-default  
+    .panel-heading
+      .row
+        .col-xs-3
+          i.fa.fa-database.fa-5x
+        .col-xs-9.text-right
+          div(style="height:115px") 
+            pie-chart(data="data" options="options" ng-if="totalSize>0") 
+    .panel-footer     
+      span(ng-if="totalSize>0") Szabad terület: {{ freeSize }} {{ unit }} / {{ totalSize }} {{ unit }}       
+      span(ng-if="!totalSize") &nbsp   

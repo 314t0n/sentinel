@@ -1,0 +1,2 @@
+section#camera(ng-controller="CameraCtrl")
+	select.form-control.selectpicker(ng-model="selectedCamera",ng-change="update()", ng-options="cam as cam.name for cam in cameras")

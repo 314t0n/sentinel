@@ -1,0 +1,73 @@
+h3 Kamera napló
+hr
+include camera
+
+.panel.panel-default
+  .panel-heading    
+    span.label-fa.label.label-default  Szűrés
+  .panel-body
+    form.control-group(name="imagelogFilter", data-ng-app="SentinelApp", ng-controller="ImagelogFilterCtrl", ng-model="value")
+      .row
+        .col-md-6
+          .dropdown
+            a.dropdown-toggle#imagelog-startdate(role="button",data-toggle="dropdown",data-target="#",href="#")
+              .input-group
+                input.form-control(type="text", value="{{ data.imagelogStartdate | date:'yyyy-MM-dd HH:mm:ss' }}" placeholder="Kezdő dátum")
+                input.form-control(type="hidden",data-ng-model="data.imagelogStartdate", placeholder="Kezdő dátum")
+                span.input-group-addon
+                  i.fa.fa-calendar-o
+         
+            ul.dropdown-menu.dropdown-light(role="menu", aria-labelledby="dLabel")
+              datetimepicker(data-ng-model="data.imagelogStartdate", data-datetimepicker-config="{ dropdownSelector: '#imagelog-startdate' }")
+        .col-md-6
+          .control-group
+            .dropdown
+              a.dropdown-toggle#imagelog-enddate(role="button",data-toggle="dropdown",data-target="#",href="#")
+                .input-group
+                  input.form-control(type="text", value="{{ data.imagelogEnddate | date:'yyyy-MM-dd HH:mm:ss' }}" placeholder="Záró dátum")
+                  input.form-control(type="hidden",data-ng-model="data.imagelogEnddate",placeholder="Záró dátum")
+                  span.input-group-addon
+                    i.fa.fa-calendar-o
+           
+              ul.dropdown-menu.dropdown-light(role="menu", aria-labelledby="dLabel")
+                datetimepicker(data-ng-required="true", data-ng-model="data.imagelogEnddate", data-datetimepicker-config="{ dropdownSelector: '#imagelog-enddate' }")
+      .row
+        .col-md-12
+          .btn-group     
+            button#imagelog-filter-default.btn(style="margin-top:15px", ng-click="filterResetAction()")
+              i.fa.fa-circle-o-notch
+              span.label-fa Alaphelyzet
+         
+            button#imagelog-filter.btn(style="margin-top:15px", ng-click="filterAction()")
+              i.fa.fa-filter 
+              span.label-fa Szűrés
+
+
+section(ng-controller="ImageLogContentCtrl")   
+  .panel.panel-default
+    .panel-heading
+      .row
+        .col-md-2
+          i#imagelog-marker.fa.fa-image-o
+          span.label-fa.label.label-default  Képek  
+        //- .col-md-2
+        //-   select.form-control.selectpicker(ng-model="itemsPerPage", ng-options="opt as opt.label for opt in itemsPerPageOptions", ng-change="updateContent()")       
+        .col-md-10         
+
+      .panel-body
+        .list-group
+           //-  | orderBy:'date':true | limitTo:5 
+          .list-group-item(ng-repeat="p in filteredImagelogs")   
+            [{{ p.cam }}] 
+            a(ng-click="openLightboxModal($index)")             
+              img.log-image.img-thumbnail(src="data:image/jpg;base64,{{p.image}}")
+            .pull-right.text-muted.small {{p.date | dateFilter}}                
+
+      .panel-footer
+        .center-block(style="text-align: center;")          
+          pagination(total-items="totalItems", items-per-page="itemsPerPage", ng-model="currentPage", ng-change="pageChanged()", max-size="10", boundary-links="true", first-text="Első", last-text="Utolsó", previous-text="Előző", next-text="Következő")
+        .center-block(style="text-align: center;")
+          p.label.label-default.gray
+            span Összesen: {{totalItems}}
+           
+     

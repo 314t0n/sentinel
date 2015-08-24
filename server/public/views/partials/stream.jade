@@ -1,0 +1,24 @@
+h2 Élőkép
+hr
+include camera
+
+section(ng-if="selectedCamera === 'all'")
+  include camera-list-stream
+
+section(ng-if="selectedCamera !== 'all'")
+  .panel.panel-default
+    .panel-heading
+      i.fa.fa-video-camera
+        span.label-fa.label.label-default Élőkép
+    .panel
+      .stream-panel   
+        .stream-group
+          canvas#camera-stream(width="{{resX}}", height="{{resY}}" ng-click="streamSwitch()")
+          .control-group.stream-control
+            button#stream-switch-btn.btn.btn-ctrl.stream-label(ng-click="streamSwitch()")
+              i#stream-ctrl(ng-class="isStreamingOn ? 'fa-pause' : 'fa-play'").fa.fa-fw
+            //- span.label-fa
+            //-   span#fps-text.label-fa.stream-label {{ fpsText }} 
+            span.label-fa      
+              timer.label-fa.stream-label(autostart="false") {{mminutes}}:{{sseconds}} 
+              

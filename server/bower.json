@@ -1,0 +1,36 @@
+{
+  "name": "bower",
+  "main": "app.js",
+  "version": "0",
+  "authors": [
+    "hajnaldavid <hajnaldavid@elte.hu>"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-bootstrap-datetimepicker": "latest",
+    "ekko-lightbox": "latest",
+    "angular-load": "~0.2.0",
+    "angular-spinner": "~0.6.1",
+    "angular-bootstrap": "~0.12.0",
+    "bootstrap-toggle": "~2.2.0",
+    "bootstrap-select": "~1.6.4",
+    "angular-bootstrap-switch": "~0.3.0",
+    "angular-toggle-switch": "~1.2.1",
+    "ngstorage": "~0.3.0",
+    "angular": "1.3.14",
+    "angularjs-toaster": "~0.4.10",
+    "chart-angular-raphaeljs-morris": "*",
+    "angular-timer": "~1.3.1",
+    "humanize-duration": "~2.6.0",
+    "pie-chart": "~1.0.0",
+    "angular-bootstrap-lightbox": "~0.5.0"
+  }
+}

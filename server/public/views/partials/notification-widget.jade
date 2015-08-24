@@ -1,0 +1,20 @@
+section(ng-controller="NotificationWidgetCtrl")
+  .panel(ng-class="(totalItems > 0) ? 'panel-yellow' : 'panel-default'")       
+    .panel-heading
+      .row
+        .col-xs-3
+          i.fa.fa-tasks.fa-5x
+        .col-xs-9.text-right
+          .huge {{ totalItems }}
+          div
+            span Értesítés          
+          div(ng-if="totalItems > 0")
+            a(href='#' ng-click="markAllAsRead()" style="color:#000")
+             i.fa.fa-fw.fa-timer-o 
+             Összes megjelölése olvasottként
+    a(href='/notification?unread=true')
+      .panel-footer
+        span.pull-left Megtekintés
+        span.pull-right
+          i.fa.fa-arrow-circle-right
+        .clearfix
