@@ -1,0 +1,54 @@
+<div class="scrollable">  
+  <div class="scrollable-content">
+
+
+    <div class="list-group">
+      <div class="list-group-item list-group-item-home list-group-item-top">
+        <h1>
+          Élőkép
+        </h1>
+      </div>
+
+      <div class="list-group-item list-group-item-home">
+       <div ng-include="src='partials/camera.html'"></div>
+     </div>
+
+     <div class="list-group-item list-group-item-home" ng-if="selectedCamera === 'all'">
+       <div ng-include="src='partials/camera-list-stream.html'"></div>
+     </div>
+
+     <div class="list-group-item list-group-item-home" ng-if="selectedCamera !== 'all'">
+      <div class="block-title">
+        <i class="fa fa-fw fa-video-camera"></i>
+        <span> Élőkép</span>
+      </div>     
+      <div>  
+      </div>       
+      <section>             
+        <div class="list-group">
+
+          <div class="stream-panel">
+            <div class="stream-group">
+              <canvas ng-click="streamSwitch()" id="camera-stream" width="290" height="210"></canvas>
+              <div class="control-group stream-control">
+                <button id="stream-switch-btn" ng-click="streamSwitch()" class="btn btn-ctrl stream-label">
+                  <i id="stream-ctrl" class="fa fa-fw" ng-class="isStreamingOn ? 'fa-pause' : 'fa-play'"></i>
+                </button>    
+                <span class="label-fa">     
+                  <timer autostart="false" class="label-fa stream-label">{{mminutes}}:{{sseconds}} 
+                  </span>
+                </span>
+              </div>
+            </div>
+          </div>            
+
+        </div>
+      </section>        
+    </div><!-- list-group -->     
+
+  </div>
+
+</div>
+</div>
+
+

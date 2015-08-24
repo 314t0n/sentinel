@@ -1,0 +1,178 @@
+<style>
+*:not(input,textarea) {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+}
+</style>
+<div class="scrollable">
+  <div class="scrollable-content">
+    <div class="list-group">
+      <div class="list-group-item list-group-item-home list-group-item-top">
+        <h1>
+          Beállítások
+        </h1>
+      </div>
+      <div class="list-group-item list-group-item-home">
+        <div ng-include="src='partials/camera.html'"></div>
+      </div>
+      <div class="list-group-item list-group-item-home" ng-if="selectedCamera === 'all'">
+        <div ng-include="src='partials/camera-list.html'"></div>
+      </div>
+      <section ng-if="selectedCamera !== 'all'">
+        <div class="list-group-item list-group-item-home">
+          <div class="block-title">
+            <i class="fa fa-fw fa-camera"></i>
+            <span> Kamera beállítások</span>
+          </div>
+          <section>
+            <div class="list-group">
+              <div class="row">
+                <div class="col-xs-6">
+                  <label style="line-height:40px">Státusz</label>
+                </div>
+                <div class="col-xs-6">
+                  <toggle-switch data-toggle="toggle" on-label="Engedélyezve" off-label="Tiltva" ng-model="camera.status" class="toggle-control"></toggle-switch>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xs-6">
+                  <label style="line-height:40px">Azonosító</label>
+                </div>
+                <div class="col-xs-6">
+                  <input data-toggle="text" ng-model="camera.id" class="toggle-control" ng-keyup="$event.keyCode == 13 && save('camera.id', camera.id, 'Azonosító')"/>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xs-6">
+                  <label style="line-height:40px" class="text-danger">Karbantartás</label>
+                </div>
+                <div class="col-xs-6">
+                  <button ng-model="camera.shutdown" ng-click="shutdown()" class="btn btn-warning"> <i class="fa fa-wrench"> </i><span>Leállítás       </span></button>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div><!-- list-group -->
+        <div class="list-group-item list-group-item-home">
+          <div class="block-title">
+            <i class="fa fa-fw fa-square"></i>
+            <span> Felbontás</span>
+          </div>
+          <section>
+            <div class="list-group">
+              <div class="row">
+                <div class="col-xs-6">
+                  <label style="line-height:40px">Szélesség</label>
+                </div>
+                <div class="col-xs-6">
+                  <input type="text"  min="0" max="1920" ng-keyup="$event.keyCode == 13 && save('resolution.x', camera.resolution.x, 'Szélesség',true, 0, 1920)" ng-model="camera.resolution.x" class="toggle-control"/>
+               </div>
+             </div>
+             <div class="row">
+              <div class="col-xs-6">
+                <label style="line-height:40px">Szélesség</label>
+              </div>
+              <div class="col-xs-6">
+               <input type="text"  min="0" max="1080"  ng-keyup="$event.keyCode == 13 && save('resolution.y', camera.resolution.y, 'Magasság',true, 0, 1080)" ng-model="camera.resolution.y" class="toggle-control"/>
+             </div>
+           </div>           
+         </div>
+       </section>
+     </div><!-- list-group -->
+     <div class="list-group-item list-group-item-home">
+      <div class="block-title">
+        <i class="fa fa-fw fa-image"></i>
+        <span> Naplózás</span>
+      </div>
+      <section>
+        <div class="list-group">
+          <div class="row">
+            <div class="col-xs-6">
+              <label style="line-height:40px">Naplózás</label>
+            </div>
+            <div class="col-xs-6">
+              <toggle-switch on-label="Engedélyezve" off-label="Tiltva" ng-model="imagelog.status" class="toggle-control"></toggle-switch>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-6">
+              <label style="line-height:40px">Biztonsági mentés az eszközön</label>
+            </div>
+            <div class="col-xs-6">
+              <toggle-switch on-label="Engedélyezve" off-label="Tiltva" ng-model="imagelog.storeImage" class="toggle-control"></toggle-switch>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-6">
+              <label style="line-height:40px">Kép készítése (másodperc)</label>
+            </div>
+            <div class="col-xs-6">
+              <input type="text" min="1" max="86400" ng-model="imagelog.interval" ng-keyup="$event.keyCode == 13 && save('imagelog.interval', imagelog.interval, 'Naplózás esetén kép készítése',true,1 ,86400)" class="toggle-control"/>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-6">
+              <label style="line-height:40px">Képek tárolása (nap)</label>
+            </div>
+            <div class="col-xs-6">
+              <input type="text" min="1" max="3" ng-model="imagelog.storeDays" ng-keyup="$event.keyCode == 13 && save('imagelog.storeDays', imagelog.storeDays, 'Naplózás esetén kép tárolása',true,1,3)" class="toggle-control"/>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div><!-- list-group -->
+    <div class="list-group-item list-group-item-home">
+      <div class="block-title">
+        <i class="fa fa-fw fa-bell"></i>
+        <span> Mozgásérzékelés</span>
+      </div>
+      <section>
+        <div class="list-group">
+          <div class="row">
+            <div class="col-xs-6">
+              <label style="line-height:40px">Mozgásérzékelés</label>
+            </div>
+            <div class="col-xs-6">
+              <toggle-switch on-label="Engedélyezve" off-label="Tiltva" ng-model="motionDetect.status" class="toggle-control"></toggle-switch>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-6">
+              <label style="line-height:40px">Biztonsági mentés az eszközön</label>
+            </div>
+            <div class="col-xs-6">
+              <toggle-switch on-label="Engedélyezve" off-label="Tiltva" ng-model="motionDetect.storeImage" class="toggle-control"></toggle-switch>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-6">
+              <label style="line-height:40px">Érzékenység (másodperc)</label>
+            </div>
+            <div class="col-xs-6">
+              <input type="text" min="0" ng-model="motionDetect.sensitivy" ng-keyup="$event.keyCode == 13 && save('motionDetect.sensitivy', motionDetect.sensitivy, 'Mozgás érzékelés érzékenység',true, 0)" class="toggle-control"/>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-6">
+              <label style="line-height:40px">Küszöb érték</label>
+            </div>
+            <div class="col-xs-6">
+              <input type="text" min="0" max="2073600" ng-model="motionDetect.threshold" ng-keyup="$event.keyCode == 13 && save('motionDetect.threshold', motionDetect.threshold, 'Mozgás érzékelés küszöbérték',true, 0 , 2073600)" class="toggle-control"/>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-6">
+              <label style="line-height:40px">Képek tárolása </label>
+            </div>
+            <div class="col-xs-6">
+              <input type="text" min="1" max="3" ng-model="motionDetect.storeDays" ng-keyup="$event.keyCode == 13 && save('motionDetect.storeDays', motionDetect.storeDays, 'Mozgás érzékelés esetén kép tárolása',true,1,3)" class="toggle-control"/>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div><!-- list-group -->
+
+  </section>
+</div>
+</div>
+</div>

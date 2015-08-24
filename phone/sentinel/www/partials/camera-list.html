@@ -1,0 +1,20 @@
+<div class="panel panel-default">
+  <div class="panel-heading"><i class="fa fa-camera"></i><span class="label-fa label label-default"> Eszközök</span></div>
+  <section ng-controller="CameraListCtrl">
+    <div class="panel-body">
+      <div class="list-group">
+        <div ng-repeat="cam in cameras track by $index" class="list-group-item">
+          <div class="row">
+            <div class="col-xs-8">              
+              <a href="#/config/{{cam.name}}" class="spacing bold">{{ cam.name }}</a>
+            </div>
+            <div class="col-xs-4"> 
+              <span ng-if="cameraStatus[cam.name]" class="label label-success">Online</span>
+              <span ng-if="!cameraStatus[cam.name]" class="label label-default">Offline  </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

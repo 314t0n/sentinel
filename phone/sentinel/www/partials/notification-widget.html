@@ -1,0 +1,15 @@
+<section ng-controller="NotificationWidgetCtrl">
+  <div ng-class="(totalItems > 0) ? 'panel-yellow' : 'panel-default'" class="panel">   
+    <div class="panel-heading">
+      <div class="row">
+        <div class="col-xs-3"><i class="fa fa-tasks fa-2x"></i></div>
+        <div class="col-xs-7 text-right">
+          <div>{{ totalItems }} Értesítés</div>  
+        </div>
+        <div ng-click="markAllAsRead()" class="col-xs-2">
+          <i ng-if="totalItems > 0" class="fa fa-2x fa-check-square"></i>         
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

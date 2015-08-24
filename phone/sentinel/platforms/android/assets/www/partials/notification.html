@@ -1,0 +1,116 @@
+<div class="scrollable">
+  <div class="scrollable-content" when-scrolled="infinitePaging()">
+    <div class="list-group">
+      <div class="list-group-item list-group-item-home list-group-item-top">
+        <h1>
+          Értesítések
+        </h1>
+      </div>
+      
+      <div class="list-group-item list-group-item-home">
+        <div ng-include="src='partials/camera.html'"></div>
+      </div>
+      <div class="list-group-item list-group-item-home">
+        <div class="block-title">
+          <i class="fa fa-fw fa-camera"></i>
+          <span> Szűrő</span>
+        </div>
+        <section>
+          <div class="list-group">
+            <form name="notificationFilter" data-ng-app="SentinelApp" ng-controller="NotificationFilterCtrl" ng-model="value" class="control-group">
+              <div class="row">
+                <!-- Start Date -->
+                <div class="col-md-6">
+                  <div class="dropdown">
+                    <a ng-click="toggleStartDate()" id="imagelog-startdate" role="button" data-toggle="dropdown" data-target="#" class="dropdown-toggle">
+                      <div class="input-group">
+                        <input disabled="disabled" type="text" value="{{ data.imagelogStartdate | date:'yyyy-MM-dd HH:mm:ss' }}" placeholder="Kezdő dátum" class="form-control"/>
+                        <input type="hidden" data-ng-model="data.imagelogStartdate" placeholder="Kezdő dátum" class="form-control"/><span class="input-group-addon"><i class="fa fa-calendar-o"></i></span>
+                      </div>
+                    </a>
+                    <ul ng-if="!startDateHidden" role="menu" aria-labelledby="dLabel" class="dropdown-menu dropdown-light">
+                      <datetimepicker data-on-set-time="onTimeSetStart(newDate, oldDate)" data-ng-model="data.imagelogStartdate" data-datetimepicker-config="{ dropdownSelector: '#imagelog-startdate' }"></datetimepicker>
+                    </ul>
+                  </div>
+                </div>
+                <!-- End Date -->
+                <div class="col-md-6">
+                  <div class="control-group">
+                    <div class="dropdown">
+                      <a ng-click="toggleEndDate()" id="imagelog-enddate" role="button" data-toggle="dropdown" data-target="#" class="dropdown-toggle">
+                        <div class="input-group">
+                          <input disabled="disabled" type="text" value="{{ data.imagelogEnddate | date:'yyyy-MM-dd HH:mm:ss' }}" placeholder="Záró dátum" class="form-control"/>
+                          <input type="hidden" data-ng-model="data.imagelogEnddate" placeholder="Záró dátum" class="form-control"/><span class="input-group-addon"><i class="fa fa-calendar-o"></i></span>
+                        </div>
+                      </a>
+                      <ul ng-if="!endDateHidden" role="menu" aria-labelledby="dLabel" class="dropdown-menu dropdown-light">
+                        <datetimepicker data-on-set-time="onTimeSetEnd(newDate, oldDate)" data-ng-required="true" data-ng-model="data.imagelogEnddate" data-datetimepicker-config="{ dropdownSelector: '#imagelog-enddate' }"></datetimepicker>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="control-group">
+                    <div class="checkbox">
+                      <label>
+                        <input type="checkbox" ng-model="data.unread"/> Olvasatlan
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="btn-group">
+                    <button id="imagelog-filter-default" style="margin-top:15px" ng-click="filterResetAction()" class="btn"><i class="fa fa-circle-o-notch"></i><span class="label-fa">Alaphelyzet</span></button>
+                    <button id="imagelog-filter" style="margin-top:15px" ng-click="filterAction()" class="btn"><i class="fa fa-filter"> </i><span class="label-fa">Szűrés</span></button>
+                  </div>
+                </div>
+              </div>              
+            </form>
+          </div>
+        </section>
+      </div><!-- list-group -->
+
+      <div class="list-group-item list-group-item-home">
+        <div class="block-title">
+          <i id="imagelog-marker" class="fa fa-fw fa-camera"></i>
+          <span> Értesítések</span>
+        </div>
+        <section ng-controller="NotificationContentCtrl">
+          <div class="list-group">
+
+            <div ng-repeat="n in filteredNotifications" class="list-group-item" ng-class="{unread: n.isUnread}" >
+
+              <div class="row">
+                <div class="col-xs-6">
+                  <i class="{{n.class}}"></i>
+                  <span class="spacing">{{n.message}}</span>
+                </div>
+                <div class="col-xs-4 text-right">                    
+                  <div style="font-style:italic" class="spacing">{{n.date | dateFilter}}    
+                  </div>
+                </div> 
+                <div class="col-xs-2 text-right" ng-click="markNotification(n)">
+                  <i ng-if="n.isUnread" class="fa fa-2x fa-check-square"></i>                      
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-xs-12">
+                  <div ng-if="n.showImg">                    
+                    <img src="data:image/jpg;base64,{{n.image}}" class="img-thumbnail"/>                       
+                  </div>
+                </div></div>
+              </div><!-- repeat -->
+
+            </div>
+          </section>
+
+        </div><!-- list-group -->
+      </div>
+    </div>
+  </div>

@@ -1,0 +1,28 @@
+{
+    "org.apache.cordova.file": {
+        "source": {
+            "type": "registry",
+            "id": "org.apache.cordova.file"
+        }
+    },
+    "com.knowledgecode.cordova.websocket": {
+        "source": {
+            "type": "registry",
+            "id": "com.knowledgecode.cordova.websocket"
+        }
+    },
+    "com.borismus.webintent": {
+        "source": {
+            "type": "git",
+            "url": "https://github.com/Initsogar/cordova-webintent.git",
+            "subdir": "."
+        }
+    },
+    "hu.dpal.phonegap.plugins.UniqueDeviceID": {
+        "source": {
+            "type": "git",
+            "url": "https://github.com/Paldom/UniqueDeviceID.git",
+            "subdir": "."
+        }
+    }
+}

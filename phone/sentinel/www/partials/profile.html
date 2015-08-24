@@ -1,0 +1,42 @@
+<div class="scrollable">
+  <div class="scrollable-content">
+    <div class="list-group">
+      <div class="list-group-item list-group-item-home list-group-item-top">
+        <h1>
+          Profil beállítások
+        </h1>
+      </div>
+      <div class="list-group-item list-group-item-home">      
+        <div class="list-group">
+          <form class="control-group">
+            <div class="row">
+
+              <div class="col-xs-4">
+                Értesítések
+              </div>
+              <div class="col-xs-8">
+                <toggle-switch data-toggle="toggle" on-label="Engedélyezve" off-label="Tiltva" ng-model="notificationStatus" class="toggle-control"></toggle-switch>
+              </div>
+
+            </div>
+            <hr/>
+            <div class="row">
+              <div class="col-xs-4">                
+              </div>
+              <div class="col-xs-8">
+                 <button ng-click="logout()" class="btn btn-warning pull-right"> 
+                  <i class="fa fa-sign-out"> </i>
+                  <span>Kilépés</span>
+                </button>
+              </div>
+              <!-- spacer -->
+              <div class="row" style="height:280px">
+              </div>
+            </div>
+          </div>
+        </form>
+      </div> 
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="hu.elte.web.hajnaldavid.sentinel" version="0.1.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>Sentinel</name>
+    <description>
+        Smartphone app
+    </description>
+    <author email="dev@cordova.apache.org" href="http://cordova.io">
+        Apache Cordova Team
+    </author>
+    <content src="index.html" />
+    <preference name="loadUrlTimeoutValue" value="60000" />
+    <preference name="loglevel" value="DEBUG" />
+    <access origin="*" /> 
+    <preference name="KeepRunning" value="false"/>
+</widget>

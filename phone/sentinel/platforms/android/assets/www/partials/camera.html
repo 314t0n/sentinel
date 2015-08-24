@@ -1,0 +1,27 @@
+<section id="camera" ng-controller="CameraCtrl">
+	<div class="row">
+		<div class="col-md-12">		
+			<div class="panel panel-primary">
+				<div class="panel-heading panel-heading-camera">
+					<div style="height: 30px" class="row">
+						<div class="col-xs-3"><i class="fa fa-camera fa-2x"></i></div>
+						<div class="col-xs-9 text-right">
+							<select ng-model="selectedCamera" ng-change="update()" ng-options="cam as cam.name for cam in cameras" class="form-control selectpicker"></select>
+						</div>
+					</div>
+				</div>
+				<a href="/#config" ng-if="selectedCamera.name !== 'Mind'">
+					<div class="panel-footer">
+						<span class="pull-left">
+							Státusz: 
+							<span ng-if="cameraStatus" class="label label-success">Online </span>
+							<span ng-if="!cameraStatus" class="label label-default">Offline</span>
+						</span>
+						<span class="pull-right">Beállítások <i class="fa fa-arrow-circle-right"></i></span>
+						<div class="clearfix"></div>
+					</div>
+				</a>
+			</div>
+		</div>    
+	</div>
+</section>

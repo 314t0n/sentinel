@@ -1,0 +1,1 @@
+cordova run android --device -d

@@ -1,0 +1,236 @@
+body {
+	font: 14px "Lucida Grande", Helvetica, Arial, sans-serif; 
+}
+
+a {
+	color: #00B7FF;
+}
+
+.log-image{
+	width: 80px;
+	max-height: 80px;
+	margin-left: 15px;
+}
+
+.stream-panel {
+	background-color: #1B1B1B;
+	width: 100%;
+	text-align: center;
+}
+
+.stream-group {
+	display: inline-block;
+	text-align: left;
+	background-color: rgb(0, 0, 0);
+}
+
+.stream-control{
+	border-top: 1px solid rgb(195, 195, 195);
+	padding-top: 2px;
+	padding-left: 1px;
+}
+.stream-label{
+	color: #E6E6E6;
+}
+.btn-ctrl{
+	background-color: #000000;	
+}
+
+.label-fa{
+	margin-left:5px;
+}
+.marker{
+	margin-right: 5px;
+}
+
+.spinner{
+	position: fixed;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%,-50%);
+	z-index: 10001;
+}
+
+.dropdown-light{
+	background-color: #fff !important;
+}
+.spacing{
+	padding-left: 5px !important;
+	padding-right: 5px !important;
+}
+
+#system-notifications{
+	width: 80%;	
+	margin: 0px auto;
+	text-align: center;
+	position: fixed;
+	z-index: 99999;
+	left: 50%;
+	top: 20%;
+	transform: translate(-50%, -20%);
+}
+
+.custom-enter,
+.custom-leave,
+.custom-move {
+	-webkit-transition: 1s linear all;
+	-moz-transition: 1s linear all;
+	-o-transition: 1s linear all;
+	transition: 1s linear all;
+	position:relative;
+}
+
+.custom-enter {
+	left:-10px;
+	opacity:0;
+}
+.custom-enter.custom-enter-active {
+	left:0;
+	opacity:1;
+}
+
+.custom-leave {
+	left:0;
+	opacity:1;
+}
+.custom-leave.custom-leave-active {
+	left:-10px;
+	opacity:0;
+}
+
+.custom-move {
+	opacity:0.5;
+}
+.custom-move.custom-move-active {
+	opacity:1;
+}
+.toggle-switch{
+	border: 1px solid #eee !important;
+}
+.toggle-switch .switch-left {
+	background-color: #5cb85c !important;
+}
+.toggle-control{
+	width: 100%;
+	border-radius: 5px;
+}
+
+.unread{
+	border-color: #F0AD4E !important;
+	color: #FFF !important;
+	background-color: #F0AD4E !important;	
+}
+
+ng-cloak{
+	display: none;
+}
+
+h1{
+	color:black;
+}
+#sp-page {
+	background-color: darkgray;
+	color: whitesmoke;
+}
+#sp-page > p {
+	padding: 10px;
+}
+ng-cloak{
+	display: none;
+}
+#main {
+	padding-top:30px;
+}
+.loading-spinner {
+	position: absolute;
+	font-size: 50px !important;
+	left: 50%;
+	top: 50%;
+	margin-left: -25px;
+	margin-top: -25px;
+}
+.list-group-item{
+	color:#000000;
+}
+.block-title{
+	background-color: #e2e2e2;
+	padding: 5px;
+}
+.unread{
+	border-color: #F0AD4E !important;
+	color: #FFF !important;
+	background-color: #F0AD4E !important;
+}
+.app-content-loading {
+	text-align: center;
+	height: 100%;
+	width: 100%;
+	background: #fff;
+	position: relative;
+}
+/*.loading-spinner {
+	position: absolute;
+	font-size: 50px;
+	left: 50%;
+	top: 50%;
+	margin-left: -25px;
+	margin-top: -25px;
+}*/
+[drag-to-dismiss]{
+  transform: translate(0,0);
+  -webkit-user-drag: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-transition: opacity 300ms, -webkit-transform 300ms;
+  -moz-transition: opacity 300ms, -moz-transform 300ms;
+  transition: opacity 300ms, transform 300ms;
+  opacity: 1;
+}
+
+.dismiss {
+	-webkit-transition: opacity 300ms, -webkit-transform 300ms;
+	-moz-transition: opacity 300ms, -moz-transform 300ms;
+	transition: opacity 300ms, transform 300ms;
+	opacity: 0.5;
+}
+.dismitted {
+	-webkit-transition: opacity 300ms, -webkit-transform 300ms;
+	-moz-transition: opacity 300ms, -moz-transform 300ms;
+	transition: opacity 300ms, transform 300ms;
+	opacity: 0;
+}
+.list-group-item-top {
+	padding-top: 30px;
+}
+.panel-heading-camera{
+	background-color: #86C543 !important;
+	border-color: #86C543 !important;
+}
+.btn-link{
+	background-color: #86C543 !important;
+	color: #fff !important;
+}
+.panel-primary{
+	border-color: #ccc !important;
+}
+.panel-primary a, .navbar-brand, a{
+	color: #86C543 !important;
+}
+.menu-bar a{
+	color: #000 !important;
+}
+.menu-toggle{
+	color: #86C543 !important;
+}
+.list-group-item.active, .active{
+	background-color: #86C543 !important;
+	color: #fff !important;
+	border-color: #000 !important;
+}
+.datetimepicker {
+    width: 295px !important;
+}

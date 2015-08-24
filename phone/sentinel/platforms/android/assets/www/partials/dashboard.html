@@ -1,0 +1,132 @@
+<div class="scrollable">  
+  <div class="scrollable-content">
+
+    <div class="list-group">
+      <div class="list-group-item list-group-item-home list-group-item-top">
+        <h1>
+          Vezérlőpult
+        </h1>
+      </div>
+      <div class="list-group-item list-group-item-home">
+        <section id="camera" ng-controller="CameraListCtrl">     
+          <div class="section">
+
+            <div class="panel-group">
+              <div class="panel panel-default" ng-repeat="cam in cameras" ui-state='myAccordion' ui-default='checkSelectedCamera(cam)'>
+                <div class="panel-heading" ui-set="{'myAccordion': cam}">                
+
+                  <div class="row panel-title">
+
+                    <div class="col-xs-6">
+                      {{cam.name}} 
+                    </div>
+                    
+                    <div class="col-xs-6">
+                      <a href="#/config/{{cam.name}}">
+                        <span class="pull-right">Beállítások <i class="fa fa-arrow-circle-right"></i></span>
+                      </a>                    
+                    </div>
+
+                  </div>
+                  <div class="row">
+                    <div class="col-xs-4">
+                     <span class="label label-success" ng-if="cameraStatus[cam.name]"> Online </span>
+                     <span class="label label-default" ng-if="!cameraStatus[cam.name]"> Offline </span>
+                   </div>
+                 </div>
+
+               </div>       
+               <div ui-if="myAccordion == cam" ui-scope-context='cam'>
+                <div class="panel-body">
+                  <div class="row">
+                    <div class="col-xs-6">
+                      Mozgásérzékelés
+                    </div>
+                    <div class="col-xs-6">
+                      <toggle-switch class="toggle-control" on-label="Be" off-label="Ki" ng-model="cam.motionDetect.status" ng-click="updateCamera(cam, 'md')"><toggle-switch>                      
+                    </div> 
+                  </div>
+                  <div class="row">
+                    <div class="col-xs-6">
+                      Naplózás
+                    </div>
+                    <div class="col-xs-6">
+                      <toggle-switch class="toggle-control" on-label="Be" off-label="Ki" ng-model="cam.imagelog.status" ng-click="updateCamera(cam, 'log')"><toggle-switch>                      
+                    </div> 
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+    </div>
+
+    <div class="list-group-item list-group-item-home">
+      <div ng-include="src='partials/notification-widget.html'"></div>
+    </div>
+
+    <div class="list-group-item list-group-item-home">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="block-title">
+            <i id="notification-marker" class="fa fa-image-o"></i>
+            <span> Értesítések </span>    
+          </div>            
+          <section ng-controller="NotificationContentCtrl">
+            <div>
+              <div class="list-group">
+                <div ng-repeat="p in filteredNotifications track by $index | orderBy:'date':true | limitTo:5 " class="list-group-item" ng-class="{unread: p.isUnread}"> 
+                  <div class="row">
+                    <div class="col-xs-8 col-md-10">  
+                      <i class="{{p.class}}"> </i>
+                      <span class="spacing">{{p.message}}</span>
+                    </div>
+                    <div class="col-xs-4 col-md-2">
+                      <div ng-if="p.showImg">                          
+                        <img src="data:image/jpg;base64,{{p.image}}" class="log-image"/>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-xs-12 col-md-12">
+                      <span class="text-muted small pull-right">{{p.date | dateFilter}}</span>
+                    </div>
+                  </div>
+                </div>
+              </div><a href="#/notification" class="btn btn-link btn-block">Értesítések megtekintése</a>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <div class="list-group-item list-group-item-home">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="block-title">
+            <i id="imagelog-marker" class="fa fa-image-o"></i>
+            <span> Kamera napló</span>
+          </div>
+          <section ng-controller="ImageLogContentCtrl">
+            <div>
+              <div class="list-group">
+                <div data-ng-animate="'custom'" ng-repeat="p in filteredImagelogs track by $index | orderBy:'date':true | limitTo:5 " class="list-group-item">          
+                 <img src="data:image/jpg;base64,{{p.image}}" data-toggle="lightbox" data-title="{{p.date | dateFilter}}" data-remote="data:image/jpg;base64,{{p.image}}" class="log-image img-thumbnail"/>
+                  <div class="pull-right text-muted small">{{p.date | dateFilter}}    </div>
+                </div>
+              </div><a href="#/imagelog" class="btn btn-link btn-block">Kamera napló megtekintése</a>
+            </div>
+          </section>
+        </div>         
+      </div>
+
+    </div>  
+
+  </div>
+
+</div>
+</div>
+
+

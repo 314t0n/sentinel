@@ -1,0 +1,57 @@
+{
+    "dev": {
+        "camera": "0",
+        "id": "RaspberryPi",
+        "imagelog": {
+            "interval": 1,
+            "status": true,
+            "storeDays": 1,
+            "storeImage": true,
+            "timestamp": true
+        },
+        "ip": "192.168.0.14",
+        "motionDetect": {
+            "MOGhistory": 200,
+            "sensitivy": 2,
+            "showImg": false,
+            "status": true,
+            "storeDays": 2,
+            "storeImage": true,
+            "threshold": 5000
+        },
+        "port": "3000",
+        "resolution": {
+            "h": 240,
+            "w": 320
+        },
+        "syslog": "system.log"
+    },
+    "test": {
+        "camera": "0",
+        "id": "Laptop01",
+        "imagelog": {
+            "interval": 20,
+            "status": false,
+            "storeDays": 2,
+            "storeImage": false,
+            "timestamp": true
+        },
+        "ip": "192.168.0.11",
+        "motionDetect": {
+            "MOGhistory": 200,
+            "sendEmail": true,
+            "sensitivy": 1,
+            "showImg": false,
+            "status": true,
+            "storeDays": 2,
+            "storeImage": false,
+            "threshold": 50
+        },
+        "port": "3000",
+        "resolution": {
+            "x": 640,
+            "y": 480
+        },
+        "syslog": "system.log"
+    }
+}

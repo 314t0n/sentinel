@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="msapplication-tap-highlight" content="no" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimal-ui" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="yes" />
+        <!-- <base href="/"/>   -->
+        <!-- <script src="http://192.168.0.14:8080/target/target-script-min.js#sentinel"></script>-->
+        <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
+        <!-- <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" /> -->
+        <!--         <link rel="stylesheet" type="text/css" href="css/index.css" /> -->
+        <!-- <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"/> -->
+        <link rel="stylesheet" href="css/sb-admin-2.css"/>
+        <link rel="stylesheet" href="css/style.css"/>
+        <link rel="stylesheet" href="css/bootstrap.css"/>
+        <link rel="stylesheet" href="bower_components/bootstrap-select/dist/css/bootstrap-select.min.css"/>
+        <link rel="stylesheet" href="bower_components/angular-bootstrap-datetimepicker/src/css/datetimepicker.css"/>
+        <link rel="stylesheet" href="bower_components/bootstrap-toggle/css/bootstrap-toggle.min.css"/>
+        <link rel="stylesheet" href="bower_components/angular-toggle-switch/angular-toggle-switch.css"/>
+        <link rel="stylesheet" href="bower_components/angularjs-toaster/toaster.css"/>
+        
+        <link rel="stylesheet" href="bower_components/mobile-angular-ui-1.2.0-beta.11/dist/css/mobile-angular-ui-hover.min.css" />
+        <link rel="stylesheet" href="bower_components/mobile-angular-ui-1.2.0-beta.11/dist/css/mobile-angular-ui-base.min.css" />
+        <link rel="stylesheet" href="bower_components/mobile-angular-ui-1.2.0-beta.11/dist/css/mobile-angular-ui-desktop.min.css" />
+        <!--    <link rel="stylesheet" href="css/topcoat-mobile-light.min.css"/>
+        <link rel="stylesheet" href="css/ng-mobile-menu.min.css" /> -->
+        <!--  <link rel="stylesheet" href="bower_components/angular-native-picker/build/themes/classic.css" />
+        <link rel="stylesheet" href="bower_components/angular-native-picker/build/themes/classic.date.css" />
+        <link rel="stylesheet" href="bower_components/angular-native-picker/build/themes/classic.time.css" /> -->
+        <link rel="stylesheet" href="bower_components/angular-bootstrap-lightbox/dist/angular-bootstrap-lightbox.min.css" />
+        <link rel="stylesheet" href="bower_components/angular-loading-bar/build/loading-bar.min.css" />
+        <title>Sentinel Phone</title>
+        <style>
+       
+        </style>
+    </head>
+    <body>
+        <toaster-container></toaster-container>
+        <!-- Sidebar -->
+        <div ng-include="src='partials/sidebar.html'"
+            ui-track-as-search-param='true'
+            class="sidebar sidebar-left">
+        </div>
+        <!-- App container -->
+        <div class="app" 
+            ui-swipe-right='Ui.turnOn("uiSidebarLeft")'
+            ui-swipe-left='Ui.turnOff("uiSidebarLeft")'>
+            <div class="navbar navbar-app navbar-absolute-top">
+                <div class="navbar-brand navbar-brand-center" ui-yield-to="title">                   
+                    Sentinel
+                </div>
+                <div class="btn-group pull-left">
+                    <div ui-toggle="uiSidebarLeft" class="btn sidebar-toggle menu-toggle">
+                        <i class="fa fa-bars"></i> Menu
+                    </div>
+                </div>
+                
+                <!--  <div class="btn-group pull-right" ui-yield-to="navbarAction">
+                    <div ui-toggle="uiSidebarRight" class="btn">
+                        <i class="fa fa-comment"></i> Chat
+                    </div>
+                </div> -->
+            </div>
+            <!-- Bottom bar -->
+           <!--  <div class="navbar navbar-app navbar-absolute-bottom">
+                <div class="btn-group justified">                   
+                    <a href="notification" class="btn btn-navbar">
+                        <i class="fa fa-tasks fa-fw"></i> Értesítések
+                    </a>              
+                </div>
+            </div> -->
+            
+            <div class="app-body" ng-class="{loading: loading}">
+                <div ng-show="loading" class="app-content-loading">
+                    <i class="fa fa-gear fa-spin loading-spinner"></i>
+                </div>
+                <div class="app-content">
+                    <div id="main" ng-view></div>
+                </div>
+            </div>
+            
+        </div>
+        
+        <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+        <!-- Libaries -->
+        <script type="text/javascript" src="bower_components/angular/angular.js"></script>
+        <!-- <script src="http://192.168.0.14:3000/socket.io/socket.io.js"></script> -->
+        <script src="js/lib/socket.io.js"></script>
+        <script src="bower_components/jquery/dist/jquery.min.js"></script>
+        <script src="bower_components/angular/angular.js"></script>
+        <script src="bower_components/angular-route/angular-route.js"></script>
+        <script src="bower_components/angular-resource/angular-resource.js"></script>
+        <script type="text/javascript" src="bower_components/ngstorage/ngStorage.min.js"></script>
+        <script src="bower_components/angular-animate/angular-animate.min.js"></script>
+        <script src="bower_components/angularjs-toaster/toaster.js"></script>
+        <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+        <script src="bower_components/spin.js/spin.js"></script>
+        <script src="bower_components/angular-spinner/angular-spinner.js"></script>
+        <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="bower_components/angular/angular.js"></script>
+        <script src="bower_components/angular-load/angular-load.js"></script>
+    
+        <script src="bower_components/moment/min/moment.min.js"></script>
+        <script src="bower_components/moment/locale/hu.js"></script>
+        <script src="bower_components/angular-bootstrap-datetimepicker/src/js/datetimepicker.js"></script>
+        <script src="bower_components/angular-native-picker/build/angular-datepicker2.js"></script>
+        <script src="bower_components/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+        <script src="bower_components/bootstrap-toggle/js/bootstrap-toggle.js"></script>
+        <script src="bower_components/angular-toggle-switch/angular-toggle-switch.js"></script>
+        <script src="bower_components/angular-touch/angular-touch.min.js"></script>
+        <script src="bower_components/angular-bootstrap-lightbox/dist/angular-bootstrap-lightbox.js"></script>
+        <script src="bower_components/angular-loading-bar/build/loading-bar.min.js"></script>
+        <script src="bower_components/humanize-duration/humanize-duration.js"></script>
+        <script src="bower_components/angular-timer/dist/angular-timer.min.js"></script>
+        <script src="bower_components/mobile-angular-ui-1.2.0-beta.11/dist/js/mobile-angular-ui.js"></script>
+        <script src="bower_components/mobile-angular-ui-1.2.0-beta.11/dist/js/mobile-angular-ui.gestures.min.js"></script>
+        <!--<script type="text/javascript" src="js/lib/ng-mobile-menu.min.js"></script>-->
+        <!-- App -->     
+        <script src="js/app/phone.app.js"></script>
+        <script src="js/app/auth/auth.service.js"></script>
+        <script src="js/app/auth/user.factory.js"></script>
+        <script src="js/app/navbar/navbar.ctrl.js"></script>
+        <script src="js/app/auth/login.ctrl.js"></script>
+        <script src="js/app/auth/profile.ctrl.js"></script>
+        <script src="js/app/broadcast.service.js"></script>
+        <script src="js/app/sockets/socket.service.js"></script>
+        <script src="js/app/sockets/sockets.service.js"></script>
+        <script src="js/app/infinitescroll.directive.js"></script>
+        <script src="js/app/config/config.service.js"></script>
+        <script src="js/app/config/config.ctrl.js"></script>
+        <script src="js/app/config/camera.service.js"></script>
+        <script src="js/app/config/camera.ctrl.js"></script>
+        <script src="js/app/config/cameralist.ctrl.js"></script>
+        <script src="js/app/dashboard/dashboard.ctrl.js"></script>
+        <script src="js/app/notification/notification.factory.js"></script>
+        <script src="js/app/notification/widget.ctrl.js"></script>
+        <script src="js/app/notification/list.service.js"></script>
+        <script src="js/app/notification/content.ctrl.js"></script>
+        <script src="js/app/notification/filter.ctrl.js"></script>
+        <script src="js/app/notification/notification.ctrl.js"></script>
+        <script src="js/app/imagelog/imagelog.factory.js"></script>
+        <script src="js/app/imagelog/list.service.js"></script>
+        <script src="js/app/imagelog/content.ctrl.js"></script>
+        <script src="js/app/imagelog/filter.ctrl.js"></script>
+        <script src="js/app/imagelog/imagelog.ctrl.js"></script>
+        <script src="js/app/stream/stream.ctrl.js"></script>
+        <script src="js/app/filters.js"></script>
+        <!-- Bootstrap -->
+        <script src="js/index.js"></script>
+        <script type="text/javascript">
+        setTimeout(function(){
+        app.initialize();
+        },300);
+        </script>
+    </body>
+</html>

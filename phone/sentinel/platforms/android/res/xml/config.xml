@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="hu.elte.web.hajnaldavid.sentinel" version="0.1.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <feature name="WebIntent">
+        <param name="android-package" value="com.borismus.webintent.WebIntent" />
+    </feature>
+    <feature name="WebSocket">
+        <param name="android-package" value="com.knowledgecode.cordova.websocket.WebSocket" />
+    </feature>
+    <feature name="File">
+        <param name="android-package" value="org.apache.cordova.file.FileUtils" />
+        <param name="onload" value="true" />
+    </feature>
+    <feature name="UniqueDeviceID">
+        <param name="android-package" value="hu.dpal.phonegap.plugins.UniqueDeviceID" />
+    </feature>
+    <name>Sentinel</name>
+    <description>
+        Smartphone app
+    </description>
+    <author email="dev@cordova.apache.org" href="http://cordova.io">
+        Apache Cordova Team
+    </author>
+    <content src="index.html" />
+    <preference name="loadUrlTimeoutValue" value="60000" />
+    <preference name="loglevel" value="DEBUG" />
+    <access origin="*" />
+    <preference name="KeepRunning" value="false" />
+</widget>
