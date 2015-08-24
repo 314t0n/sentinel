@@ -100,10 +100,9 @@
             }
 
             return params;
-        }
-
+        }   
         return {
-            update: function($scope, $routeParams) {
+            update: function($scope, $routeParams) {      
                 updateImagelogList($scope, $routeParams, imagelogFactory);
             },
             config: config,

@@ -1,6 +1,6 @@
 (function() {
 
-    var injectParams = ['config', '$scope', '$rootScope', '$routeParams', '$localStorage', '$http', '$anchorScroll', '$location', '$timeout', '$q', 'socketService', 'configFactory', 'toaster', '$modal', 'cameraFactory', 'cfpLoadingBar'];
+    var injectParams = ['config', '$scope', '$rootScope', '$routeParams', '$localStorage', '$http', '$anchorScroll', '$location', '$timeout', '$q', 'socketService', 'configFactory', 'toaster', '$modal', 'cameraFactory', 'cfpLoadingBar', 'EventBinderService'];
 
     var updateLock = false;
 
@@ -10,7 +10,7 @@
      * @param  {[type]} cameraSocketService [socket io service]
      * @param  {[type]} configFactory       [config loader, updater]
      */
-    var configIndexCtrl = function(config, $scope, $rootScope, $routeParams, $localStorage, $http, $anchorScroll, $location, $timeout, $q, socketService, configFactory, toaster, $modal, cameraFactory, cfpLoadingBar) {
+    var configIndexCtrl = function(config, $scope, $rootScope, $routeParams, $localStorage, $http, $anchorScroll, $location, $timeout, $q, socketService, configFactory, toaster, $modal, cameraFactory, cfpLoadingBar, EventBinderService) {
 
         $scope.loading = true;
 
@@ -26,7 +26,9 @@
 
         }
 
-        $scope.$on('camera:change', function(event, msg) {
+        EventBinderService.setScope($scope);
+
+        EventBinderService.add('camera:change', function(event, msg) {
             // prevent watch events while updating 
             updateLock = true;
             $scope.loading = true;
@@ -219,8 +221,10 @@
                         console.log('config')
                         console.log(data.config.camera)
 
-                        if (data.config.camera === null) {
+                        if (data.config.camera === null || typeof data.config.camera === 'undefined') {
+
                             reject();
+
                         } else {
 
                             $scope.cameras = data.config.cameras;
@@ -241,6 +245,11 @@
             $location.path('/config/' + id, false);
         }
 
+        EventBinderService.add('$destroy', function() {
+
+            EventBinderService.removeAll();
+
+        });
 
     }
 

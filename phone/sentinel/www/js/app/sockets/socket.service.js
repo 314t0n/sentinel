@@ -17,15 +17,6 @@
 
             var id = cameraID;
 
-          /*  console.log('->Socket cam id: ');
-            console.log(socketUrl);
-            console.log(clientID);
-            console.log(cameraID);
-            console.log('<-Socket cam id: ');*/
-
-      /*      console.log(io);
-            console.log(socketUrl + clientID);*/
-
             var socket = io.connect(socketUrl + clientID, {
                /* 'origins': '*:*',*/
                 forceNew: true,
@@ -36,8 +27,6 @@
                     'token': $localStorage.token
                 }
             });
-
-            /*console.log(socket);*/
 
             socket.on('error', function(err) {
                 console.error(err);

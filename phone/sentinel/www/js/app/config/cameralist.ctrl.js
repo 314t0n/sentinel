@@ -1,8 +1,8 @@
 (function() {
 
-    var injectParams = ['config', '$scope', '$localStorage', '$rootScope', '$http', '$routeParams', '$timeout', 'cameraFactory', 'socketService', 'configFactory', 'toaster', 'BroadcastService', 'authService'];
+    var injectParams = ['config', '$scope', '$localStorage', '$rootScope', '$http', '$routeParams', '$timeout', 'cameraFactory', 'socketService', 'configFactory', 'toaster', 'BroadcastService', 'authService', 'quickRepeatList'];
 
-    var cameraCtrl = function(config, $scope, $localStorage, $rootScope, $http, $routeParams, $timeout, cameraFactory, socketService, configFactory, toaster, BroadcastService, authService) {
+    var cameraCtrl = function(config, $scope, $localStorage, $rootScope, $http, $routeParams, $timeout, cameraFactory, socketService, configFactory, toaster, BroadcastService, authService, quickRepeatList) {
 
         var socket;
 
@@ -17,11 +17,12 @@
          */
         cameraFactory.get({}, function(data, responseHeaders) {
             // store cameras for select
-            $scope.cameras = data.cameras;           
+            var cameras  = data.cameras || [];
+            $scope.cameras = cameras;           
             // first load
             if (typeof $localStorage.camera !== 'undefined') {
                 // get selected camera
-                $scope.selectedCamera = data.cameras.filter(function(el) {
+                $scope.selectedCamera = cameras.filter(function(el) {
                     return el.name === $localStorage.camera.name;
                 })[0];
 
@@ -40,7 +41,7 @@
             // set statuses to the scope from localstorage
             updateStatusLabel();
             // notify other controllers if cameras were loaded
-            $rootScope.$broadcast('camera:load', data.cameras.map(function(el) {
+            $rootScope.$broadcast('camera:load', cameras.map(function(el) {
                 return el.name;
             }));
 

@@ -1,5 +1,3 @@
-console.log('SentinelApp');
-
 var sentinelApp = angular.module('SentinelApp', [
     'ngRoute',
     'ngResource',
@@ -11,10 +9,10 @@ var sentinelApp = angular.module('SentinelApp', [
     'ui.bootstrap.datetimepicker',
     'angular-datepicker',
     'mobile-angular-ui',
-    /*'shoppinpal.mobile-menu',*/
     'bootstrapLightbox',
     'timer',
-    'mobile-angular-ui.gestures'
+    'mobile-angular-ui.gestures',
+    'QuickList'
 ]).config(['$routeProvider', '$controllerProvider',
     '$compileProvider', '$filterProvider', '$provide', '$httpProvider', '$locationProvider', '$sceDelegateProvider', 'cfpLoadingBarProvider', 'LightboxProvider',
     function($routeProvider, $controllerProvider,
@@ -27,8 +25,8 @@ var sentinelApp = angular.module('SentinelApp', [
 
         $sceDelegateProvider.resourceUrlWhitelist([
             'self',
-            'http://localhost:*/**',         
-            app.baseUrl         
+            'http://localhost:*/**',
+            app.baseUrl
         ]);
 
         /*$locationProvider.html5Mode(false);*/
@@ -91,7 +89,7 @@ var sentinelApp = angular.module('SentinelApp', [
                 templateUrl: 'partials/login.html'
             });
 
-
+        //Authorization
         $httpProvider.interceptors.push(['$q', '$location', '$localStorage',
             function($q, $location, $localStorage) {
                 return {
@@ -115,24 +113,21 @@ var sentinelApp = angular.module('SentinelApp', [
     }
 
 ]);
-
-sentinelApp.value('config', {
-
-    /*socketUrl: 'http://192.168.0.14:3000/',*/
-    socketUrl: 'http://192.168.0.14:3000/',
-    /*socketUrl: 'http://sentinel:3000/',*/
+//Globals
+sentinelApp.value('config', {    
+    socketUrl: app.baseUrl || 'http://localhost',
     sockets: {
         camera: 'camera-client',
         mdetect: 'motion-detect-client',
         stream: 'stream-client'
     }
-
 });
 
 sentinelApp.run(['$route', '$rootScope', '$location', 'authService',
 
     function($route, $rootScope, $location, authService) {
 
+        //
         var original = $location.path;
         $location.path = function(path, reload) {
             if (reload === false) {
@@ -145,6 +140,7 @@ sentinelApp.run(['$route', '$rootScope', '$location', 'authService',
             return original.apply($location, [path]);
         };
 
+        //Authoriztaion
         $rootScope.$on("$routeChangeStart", function(event, next, current) {
             if (next && next.$$route && next.$$route.secure) {
                 if (!authService.isLoggedIn()) {
@@ -154,7 +150,7 @@ sentinelApp.run(['$route', '$rootScope', '$location', 'authService',
                         $location.path($location.path());
                     }, function() {
 
-                            console.log('login');
+                        console.log('login');
                         $rootScope.$evalAsync(function() {
                             authService.redirectToLogin();
                             $location.path('/login').replace();

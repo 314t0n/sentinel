@@ -76,7 +76,7 @@
         <section ng-controller="ImageLogContentCtrl">
           <div class="list-group">
 
-            <div ng-repeat="n in filteredImagelogs" class="list-group-item">
+            <div quick-ng-repeat="n in filteredImagelogs" quick-repeat-list="filteredImagelogs" class="list-group-item">
               <div class="row">
                 <div class="col-xs-12">                 
                   <img class="center-block" src="data:image/jpg;base64,{{n.image}}" />

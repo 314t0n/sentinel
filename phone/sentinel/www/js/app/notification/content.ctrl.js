@@ -1,6 +1,6 @@
 (function() {
 
-    var injectParam = ['$scope', '$rootScope', '$http', '$resource', '$localStorage', '$location', '$routeParams', '$timeout', 'notificationListService', 'Lightbox', 'toaster', 'notificationFactory', 'cfpLoadingBar'];
+    var injectParam = ['$scope', '$rootScope', '$http', '$resource', '$localStorage', '$location', '$routeParams', '$timeout', 'notificationListService', 'Lightbox', 'toaster', 'notificationFactory', 'cfpLoadingBar', 'quickRepeatList', 'EventBinderService'];
 
     sentinelApp.directive('dragToDismiss', function($drag, $parse, $timeout) {
         return {
@@ -43,7 +43,7 @@
         };
     });
 
-    var contentCtrl = function($scope, $rootScope, $http, $resource, $localStorage, $location, $routeParams, $timeout, notificationListService, Lightbox, toaster, notificationFactory, cfpLoadingBar) {
+    var contentCtrl = function($scope, $rootScope, $http, $resource, $localStorage, $location, $routeParams, $timeout, notificationListService, Lightbox, toaster, notificationFactory, cfpLoadingBar, quickRepeatList, EventBinderService) {
 
         $scope.loading = true;
 
@@ -55,7 +55,9 @@
 
         notificationListService.update($scope, $routeParams);
 
-        $scope.$on('camera:change', function(event, camera) {
+        EventBinderService.setScope($scope);
+
+        EventBinderService.add('camera:change', function(event, camera) {
 
             if (camera.name === 'Mind') {
                 $routeParams.cam = 'all';
@@ -71,7 +73,7 @@
 
         });
 
-        $scope.$on('notification:change:all', function(event, args) {
+        EventBinderService.add('notification:change:all', function(event, args) {
 
             $scope.currentPage = 1;
             $scope.totalItems = $scope.itemsPerPage;
@@ -79,13 +81,13 @@
 
         });
 
-        $scope.$on('filter:notification', function(event, params) {
+        EventBinderService.add('filter:notification', function(event, params) {
 
             notificationListService.update($scope, params);
 
         });
 
-        $scope.$on('filter:notification:reset', function(event) {
+        EventBinderService.add('filter:notification:reset', function(event) {
 
             notificationListService.update($scope, {});
 
@@ -122,7 +124,7 @@
 
         }
 
-        $scope.$on('scrolled', function(event, args) {
+        EventBinderService.add('scrolled', function(event, args) {
             cfpLoadingBar.start();
             $scope.currentPage++;
             $scope.totalItems += $scope.itemsPerPage;
@@ -157,9 +159,15 @@
 
         });*/
 
-        $scope.$on('feed:notification', function(event, args) {
+        EventBinderService.add('feed:notification', function(event, args) {
 
             notificationListService.update($scope, $routeParams);
+
+        });
+
+        EventBinderService.add('$destroy', function() {
+
+            EventBinderService.removeAll();
 
         });
 

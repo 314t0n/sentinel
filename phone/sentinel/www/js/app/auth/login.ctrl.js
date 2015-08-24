@@ -6,8 +6,8 @@
 
     var loginController = function($scope, $rootScope, $http, $location, $timeout, $q, $localStorage, authService, toaster) {
 
-        $scope.email = "user@test.com";
-        $scope.password = "test";
+        $scope.email = "hajnaldavid@elte.hu";
+        $scope.password = "314_@Ultron";
 
         $scope.dev = true;
 

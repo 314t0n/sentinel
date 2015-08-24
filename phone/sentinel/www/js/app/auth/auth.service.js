@@ -59,7 +59,8 @@
                 console.log(data);
                 userFactory(app.baseUrl + 'api/v1/auth/me').update(data, success, error);                
             },
-            login: function(data, success, error) {            
+            login: function(data, success, error) {     
+                console.log(app.baseUrl);       
                 $http.post(app.baseUrl + 'api/v1/auth/login', data).success(function(res) {
                     if (res.status === 'success') {
                         var user = res.user;

@@ -3,7 +3,7 @@
   <section ng-controller="CameraListCtrl">
     <div class="panel-body">
       <div class="list-group">
-        <div ng-repeat="cam in cameras track by $index" class="list-group-item">
+        <div quick-ng-repeat="cam in cameras track by $index" quick-repeat-list="cameras" class="list-group-item">
           <div class="row">
             <div class="col-xs-8">              
               <a href="#/livestream/{{cam.name}}" class="spacing bold">{{ cam.name }}</a>

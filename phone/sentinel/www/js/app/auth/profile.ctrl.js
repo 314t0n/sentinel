@@ -52,7 +52,7 @@
         });
 
         var firstLoad = true;
-
+        //@todo unbind
         $scope.$watch('notificationStatus', function() {
 
             if ($scope.loading) {

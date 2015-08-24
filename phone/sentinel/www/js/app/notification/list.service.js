@@ -29,11 +29,13 @@
 
             var params = setQueryParams($routeParams);
 
-            return function(fn) {
+            return function(callback) {
 
                 notificationFactory(app.baseUrl + 'api/v1/notification').query(params,
 
                     function(data, responseHeaders) {
+
+                        var notifications = data.notifications || [];
 
                         var classes = {
                             'info': 'fa-info',
@@ -45,24 +47,22 @@
 
                         if (isAppend) {
 
-                            Array.prototype.push.apply($scope.filteredNotifications, data.notifications.map(setAttributes));
+                            Array.prototype.push.apply($scope.filteredNotifications, notifications.map(setAttributes));
 
                         } else {
 
-                            $scope.filteredNotifications = data.notifications.map(setAttributes);
+                            $scope.filteredNotifications = notifications.map(setAttributes);
 
                         }
                         // set attributes for ui settings
                         function setAttributes(el) {
                             var i = classes[el.level] || '';
                             el.class = itemClass + i;
-                            el.showImg = typeof el.image !== 'undefined';
+                            el.showImg = typeof el.image !== 'undefined' && el.image !== null && el.image.length > 0;
                             return el;
-                        }
+                        }              
 
-                        /*updateImageGallery($scope.filteredNotifications);*/
-
-                        fn();
+                        callback();
 
                     });
 
@@ -141,13 +141,12 @@
         }
 
         return {
-            update: function($scope, $routeParams, isAppend, fn) {
-                console.log('list service')
+            update: function($scope, $routeParams, isAppend, callback) {              
                 var append = isAppend === 'undefined' ? false : isAppend;
                 var promise = updateImagelogList($scope, $routeParams, notificationFactory, append);
                 return promise(function() {
-                    if (typeof fn === 'function') {
-                        fn();
+                    if (typeof callback === 'function') {
+                        callback();
                     }
                 });
             },

@@ -1,5 +1,5 @@
 var app = {
-    baseUrl: 'http://192.168.0.14:3000/',  
+    baseUrl: 'http://localhost',  
     initialize: function() {
         
         var app = document.URL.indexOf('http://') === -1 && document.URL.indexOf('https://') === -1;

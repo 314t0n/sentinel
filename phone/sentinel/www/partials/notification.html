@@ -83,7 +83,7 @@
         <section ng-controller="NotificationContentCtrl">
           <div class="list-group">
 
-            <div ng-repeat="n in filteredNotifications" class="list-group-item" ng-class="{unread: n.isUnread}" >
+            <div quick-ng-repeat="n in filteredNotifications" quick-repeat-list="filteredNotifications" class="list-group-item" ng-class="{unread: n.isUnread}" >
 
               <div class="row">
                 <div class="col-xs-6">

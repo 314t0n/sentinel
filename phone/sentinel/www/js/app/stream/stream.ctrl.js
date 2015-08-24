@@ -1,8 +1,8 @@
 (function() {
 
-    var injectParams = ['config', '$scope', '$rootScope', '$http', 'socketService', '$localStorage', '$timeout', '$routeParams', 'cfpLoadingBar', '$location', 'toaster', '$window', '$document'];
+    var injectParams = ['config', '$scope', '$rootScope', '$http', 'socketService', '$localStorage', '$timeout', '$routeParams', 'cfpLoadingBar', '$location', 'toaster', '$window', '$document', 'EventBinderService'];
 
-    var streamCtrl = function(config, $scope, $rootScope, $http, socketService, $localStorage, $timeout, $routeParams, cfpLoadingBar, $location, toaster, $window, $document) {
+    var streamCtrl = function(config, $scope, $rootScope, $http, socketService, $localStorage, $timeout, $routeParams, cfpLoadingBar, $location, toaster, $window, $document, EventBinderService) {
 
         $scope.loading = true;
 
@@ -17,7 +17,9 @@
             $timeout(updateDOM, 1000);
         }
 
-        $scope.$on('camera:change', function(event, msg) {
+        EventBinderService.setScope($scope);
+
+        EventBinderService.add('camera:change', function(event, msg) {
 
             $scope.loading = true;
 
@@ -71,7 +73,7 @@
 
                 $scope.resX = 320;
                 $scope.resX = 240;
-                
+
             }
 
             var settings = {
@@ -232,17 +234,17 @@
                 }
             });
 
-            $scope.$on("$destroy", function() {
+            EventBinderService.add("$destroy", function() {
                 if (isStreamingOn) {
                     stopStream();
                 }
                 document.addEventListener("pause", stopStream, false);
                 document.addEventListener("backbutton", stopStream, false);
                 /*    angular.element($document).bind("pause", stopStream);
-            angular.element($document).bind("backbutton", stopStream);*/
+                angular.element($document).bind("backbutton", stopStream);*/
             });
 
-            $scope.$on('$locationChangeStart', function(event) {
+            EventBinderService.add('$locationChangeStart', function(event) {
                 if (isStreamingOn) {
                     stopStream();
                 }
@@ -250,9 +252,9 @@
 
             angular.element($window).bind("beforeunload", stopStream);
 
-            document.addEventListener("pause", stopStream, false);
+            angular.element($document).bind("pause", stopStream);
 
-            document.addEventListener("backbutton", stopStream, false);
+            angular.element($document).bind("backbutton", stopStream);
 
             cameraSocket.on('sysmsg:stream', function(msg) {
 
@@ -268,6 +270,8 @@
             });
 
             function stopStream() {
+
+                console.log('- STOP STREAM -');
 
                 isStreamingOn = false;
 
@@ -331,6 +335,12 @@
             }
 
         }
+
+        EventBinderService.add('$destroy', function() {
+
+            EventBinderService.removeAll();
+
+        });
 
     }
 

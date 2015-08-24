@@ -12,7 +12,7 @@
           <div class="section">
 
             <div class="panel-group">
-              <div class="panel panel-default" ng-repeat="cam in cameras" ui-state='myAccordion' ui-default='checkSelectedCamera(cam)'>
+              <div class="panel panel-default" quick-ng-repeat="cam in cameras" quick-repeat-list="cameras" ui-state='myAccordion' ui-default='checkSelectedCamera(cam)'>
                 <div class="panel-heading" ui-set="{'myAccordion': cam}">                
 
                   <div class="row panel-title">
@@ -77,21 +77,21 @@
           <section ng-controller="NotificationContentCtrl">
             <div>
               <div class="list-group">
-                <div ng-repeat="p in filteredNotifications track by $index | orderBy:'date':true | limitTo:5 " class="list-group-item" ng-class="{unread: p.isUnread}"> 
+                <div quick-ng-repeat="n in filteredNotifications" quick-repeat-list="filteredNotifications" class="list-group-item" ng-class="{unread: n.isUnread}"> 
                   <div class="row">
                     <div class="col-xs-8 col-md-10">  
-                      <i class="{{p.class}}"> </i>
-                      <span class="spacing">{{p.message}}</span>
+                      <i class="{{n.class}}"> </i>
+                      <span class="spacing">{{n.message}}</span>
                     </div>
                     <div class="col-xs-4 col-md-2">
-                      <div ng-if="p.showImg">                          
-                        <img src="data:image/jpg;base64,{{p.image}}" class="log-image"/>
+                      <div ng-if="n.showImg">                          
+                        <img src="data:image/jpg;base64,{{n.image}}" class="log-image"/>
                       </div>
                     </div>
                   </div>
                   <div class="row">
                     <div class="col-xs-12 col-md-12">
-                      <span class="text-muted small pull-right">{{p.date | dateFilter}}</span>
+                      <span class="text-muted small pull-right">{{n.date | dateFilter}}</span>
                     </div>
                   </div>
                 </div>
@@ -112,7 +112,7 @@
           <section ng-controller="ImageLogContentCtrl">
             <div>
               <div class="list-group">
-                <div data-ng-animate="'custom'" ng-repeat="p in filteredImagelogs track by $index | orderBy:'date':true | limitTo:5 " class="list-group-item">          
+                <div quick-ng-repeat="p in filteredImagelogs" quick-repeat-list="filteredImagelogs" class="list-group-item">          
                  <img src="data:image/jpg;base64,{{p.image}}" data-toggle="lightbox" data-title="{{p.date | dateFilter}}" data-remote="data:image/jpg;base64,{{p.image}}" class="log-image img-thumbnail"/>
                   <div class="pull-right text-muted small">{{p.date | dateFilter}}    </div>
                 </div>

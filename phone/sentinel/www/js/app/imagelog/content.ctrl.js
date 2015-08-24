@@ -1,9 +1,9 @@
 (function() {
 
-    var injectParam = ['config', '$scope', '$rootScope', '$http', '$localStorage', '$location', '$routeParams', '$timeout', 'socketService', 'imagelogListService', 'Lightbox'];
+    var injectParam = ['config', '$scope', '$rootScope', '$http', '$localStorage', '$location', '$routeParams', '$timeout', 'socketService', 'imagelogListService', 'Lightbox', 'EventBinderService'];
 
 
-    var contentCtrl = function(config, $scope, $rootScope, $http, $localStorage, $location, $routeParams, $timeout, socketService, imagelogListService, Lightbox) {
+    var contentCtrl = function(config, $scope, $rootScope, $http, $localStorage, $location, $routeParams, $timeout, socketService, imagelogListService, Lightbox, EventBinderService) {
 
         $scope.currentPage = 1;
         $scope.totalItems = 0;
@@ -12,7 +12,9 @@
 
         imagelogListService.update($scope, $routeParams);
 
-        $scope.$on('camera:change', function(event, msg) {
+        EventBinderService.setScope($scope);
+
+        EventBinderService.add('camera:change', function(event, msg) {
 
             if (camera.name === 'Mind') {
                 $routeParams.cam = 'all';
@@ -28,13 +30,13 @@
 
         });
 
-        $scope.$on('filter:imagelog', function(event, params) {
+        EventBinderService.add('filter:imagelog', function(event, params) {
             console.log("szur")
             imagelogListService.update($scope, params);
 
         });
 
-        $scope.$on('filter:imagelog:reset', function(event) {
+        EventBinderService.add('filter:imagelog:reset', function(event) {
 
             imagelogListService.update($scope, {});
 
@@ -48,7 +50,7 @@
             // ..
         };
 
-        $scope.$on('scrolled', function(event, args) {
+        EventBinderService.add('scrolled', function(event, args) {
             cfpLoadingBar.start();
             $scope.currentPage++;
             $scope.totalItems += $scope.itemsPerPage;
@@ -57,14 +59,15 @@
             });
         });
 
-        /*$scope.openLightboxModal = function(index) {
-            var images = imagelogListService.getImageArray();
-            Lightbox.openModal(images, index);
-        };*/
-
-        $scope.$on('feed:imagelog', function(event, args) {
+        EventBinderService.add('feed:imagelog', function(event, args) {
 
             imagelogListService.update($scope, $routeParams);
+
+        });
+
+        EventBinderService.add('$destroy', function() {
+
+            EventBinderService.removeAll();
 
         });
 
