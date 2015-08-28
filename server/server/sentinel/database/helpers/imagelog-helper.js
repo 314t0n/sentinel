@@ -1,6 +1,6 @@
-var client = require('./elasticsearch').client;
-var logger = require('../logger').app;
-var utils = require('../utils');
+var client = require('../concrete/elasticsearch').client;
+var logger = require('../../logger').app;
+var utils = require('../../utils');
 var hasKeys = utils.hasKeys;
 
 function add(imagelog) {

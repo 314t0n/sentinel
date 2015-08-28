@@ -1,8 +1,8 @@
 var Promise = require('bluebird');
-var utils = require('../utils');
+var utils = require('../../utils');
 var isUndefined = utils.isUndefined;
 var hasKeys = utils.hasKeys;
-var logger = require('../logger').app;
+var logger = require('../../logger').app;
 
 var getFilteredCollection = function getFilteredCollection(collection, query, fn) {
 

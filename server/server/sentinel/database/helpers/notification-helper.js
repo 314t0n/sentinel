@@ -1,6 +1,6 @@
 var mongoHelper = require('./mongo-helper');
 
-var logger = require('../../sentinel/logger').app;
+var logger = require('../../logger').app;
 /**
  * Get filtered elements
  * @param  {[type]}   collection [description]

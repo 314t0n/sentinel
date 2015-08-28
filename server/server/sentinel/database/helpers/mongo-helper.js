@@ -1,35 +1,9 @@
-var hasKeys = require('../utils').hasKeys;
-var logger = require('../logger').app;
-var extend = require('extend');
 /**
- * Filtering by date, sorting, pagination
- * @param  {Mongoskin collection} collection db.collection('name')
- * @return {Mongoskin collection}
- * @deprecated since monk
+ * Module dependencies
  */
- var filteredCollection = function filteredCollection(collection) {
-
-    var _collection = collection;
-
-    return {
-        setDateFilter: function(query) {
-            _collection = setDateFilter(query)(_collection);
-            return this;
-        },
-        setSortType: function(query) {
-            _collection = setSortType(query)(_collection);
-            return this;
-        },
-        setLimit: function(query) {
-            _collection = setLimit(query)(_collection);
-            return this;
-        },
-        getCollection: function() {
-            return _collection;
-        }
-
-    }
-}
+var hasKeys = require('../../utils').hasKeys;
+var logger = require('../../logger').app;
+var extend = require('extend');
 
 function setLimit(query) {
     return function(collection) {
@@ -210,4 +184,10 @@ exports.countCollection = countCollection;
 exports.setDateFilter = setDateFilter;
 exports.getSortType = getSortType;
 exports.setSortType = setSortType;
+exports.getDateFilter = getDateFilter;
+exports.getUnreadFilter = getUnreadFilter;
+exports.getCameraFilter = getCameraFilter;
+exports.getLimitFilter = getLimitFilter;
+exports.getOffsetFilter = getOffsetFilter;
+exports.getSortFilter = getSortFilter;
 exports.setLimit = setLimit;
