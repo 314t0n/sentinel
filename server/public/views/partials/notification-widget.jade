@@ -6,12 +6,14 @@ section(ng-controller="NotificationWidgetCtrl")
           i.fa.fa-tasks.fa-5x
         .col-xs-9.text-right
           .huge {{ totalItems }}
-          div
-            span Értesítés          
+          div           
+            span Értesítés            
           div(ng-if="totalItems > 0")
             a(href='#' ng-click="markAllAsRead()" style="color:#000")
-             i.fa.fa-fw.fa-timer-o 
-             Összes megjelölése olvasottként
+             i.fa.fa-fw.fa-timer-o
+             Összes megjelölése olvasottként  
+          div(ng-if="totalItems == 0")  
+            span(style="line-height:38px") &nbsp 
     a(href='/notification?unread=true')
       .panel-footer
         span.pull-left Megtekintés

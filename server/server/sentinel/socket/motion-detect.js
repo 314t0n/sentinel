@@ -1,6 +1,6 @@
 var clientModel = require('../model/client');
 var streamClientModel = require('../model/streamClient');
-var notificationDBHelper = require('../database/notification-helper');
+var notifcationFactory = require('../model/notification');
 /**
  * motion-detect and motion-detect-client namespace events
  * @param  {SocketIO} io      Socket.IO library
@@ -131,13 +131,18 @@ var motionDetectController = function(io, logger, db, options) {
      * @param  {String} level alert level
      */
     function persistNotification(data, id, level) {
-        data.cam = id;
-        data.level = level || 'info';
-        data.date = new Date();
-        data.isUnread = true;
-        notificationDBHelper.add(db, data, function() {
-            logger.log('debug', 'Notification message persist.');
-        });
+
+        var notification = notifcationFactory.create(id, data.message, level, data.image);
+        notification.isUnread = true;
+
+        db.save('notifications', notification)
+            .on('success', function() {
+                logger.log('debug', 'Notification message persisted.');
+            })
+            .on('error', function(err) {
+                logger.log('error', err);
+            });
+
     }
     /**
      * Test function

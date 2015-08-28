@@ -1,4 +1,4 @@
-var imagelogDBHelper = require('../database/imagelog-helper');
+var imagelogDBHelper = require('../database/helpers/imagelog-helper');
 var clientModel = require('../model/client');
 var streamClientModel = require('../model/streamClient');
 var isUndefined = require('../utils').isUndefined;
@@ -83,7 +83,7 @@ var cameraController = function cameraController(io, logger, db, options) {
             applyCommand: function(msg, socket, camId) {
 
                 logger.log('debug', '[Camera] System command %s', msg.command);
-        
+
                 if (msg.command && commands.hasOwnProperty(msg.command)) {
 
                     logger.log('debug', '[Camera] System command %s', msg.command);
@@ -136,7 +136,7 @@ var cameraController = function cameraController(io, logger, db, options) {
 
         userClients.add(id, socket);
 
-        logger.log('debug', '[Camera] [Connection] client connected with device id: %s %s', id, socket.id);
+        logger.log('debug', '[Connection] [Camera] client connected with device id: %s %s', id, socket.id);
 
         sendInitStatus(socket);
 
@@ -288,61 +288,59 @@ var cameraController = function cameraController(io, logger, db, options) {
 
         logger.log('info', 'Synchronizing Config for %s', id);
 
-        var cameras = db.get('camera');
+        db.query('camera').filter({
+                name: id
+            },
+            function(err, items) {
 
-        cameras.find({
-            name: id
-        }, function(err, items) {
+                if (err) {
+                    logger.log('error', err);
+                }
 
-            if (err) {
-                logger.log('error', err);
-            }
+                var camera = items[0];
 
-            var camera = items[0];
+                var config = [{
+                    name: 'status',
+                    value: camera.status
+                }, {
+                    name: 'imagelog.status',
+                    value: camera.imagelog.status
+                }, {
+                    name: 'imagelog.storeImage',
+                    value: camera.imagelog.storeImage
+                }, {
+                    name: 'imagelog.interval',
+                    value: camera.imagelog.interval
+                }, {
+                    name: 'imagelog.storeDays',
+                    value: camera.imagelog.storeDays
+                }, {
+                    name: 'motionDetect.status',
+                    value: camera.motionDetect.status
+                }, {
+                    name: 'motionDetect.storeImage',
+                    value: camera.motionDetect.storeImage
+                }, {
+                    name: 'motionDetect.sensitivy',
+                    value: camera.motionDetect.sensitivy
+                }, {
+                    name: 'motionDetect.storeDays',
+                    value: camera.motionDetect.storeDays
+                }, {
+                    name: 'resolution.x',
+                    value: camera.resolution.x
+                }, {
+                    name: 'resolution.y',
+                    value: camera.resolution.y
+                }];
 
-            var config = [{
-                name: 'status',
-                value: camera.status
-            }, {
-                name: 'imagelog.status',
-                value: camera.imagelog.status
-            }, {
-                name: 'imagelog.storeImage',
-                value: camera.imagelog.storeImage
-            }, {
-                name: 'imagelog.interval',
-                value: camera.imagelog.interval
-            }, {
-                name: 'imagelog.storeDays',
-                value: camera.imagelog.storeDays
-            }, {
-                name: 'motionDetect.status',
-                value: camera.motionDetect.status
-            }, {
-                name: 'motionDetect.storeImage',
-                value: camera.motionDetect.storeImage
-            }, {
-                name: 'motionDetect.sensitivy',
-                value: camera.motionDetect.sensitivy
-            }, {
-                name: 'motionDetect.storeDays',
-                value: camera.motionDetect.storeDays
-            }, {
-                name: 'resolution.x',
-                value: camera.resolution.x
-            }, {
-                name: 'resolution.y',
-                value: camera.resolution.y
-            }];
-
-            cameraClients.emit(id, {
-                command: 'system:config:batch',
-                data: config
+                cameraClients.emit(id, {
+                    command: 'system:config:batch',
+                    data: config
+                });
             });
-
-        });
     }
-    /**
+    /**    
      * Persist size data
      * @param  {String} name camera name
      * @param  {Object} data size data
@@ -350,26 +348,21 @@ var cameraController = function cameraController(io, logger, db, options) {
      */
     function updateSizeData(name, data) {
 
-        var collection = db.get('camera');
-
-        collection.findAndModify({
-            name: name
-        }, {
-            $set: {
-                size: {
-                    total: data.total,
-                    free: data.free,
-                }
+        var update = db.query('camera').filter({
+            'name': name
+        }).update({
+            size: {
+                total: data.total,
+                free: data.free,
             }
-        }, function(err) {
-
-            if (err) {
-                logger.log('error', err);
-            }
-
-            logger.log('info', '%s size updated', name);
-
         });
+
+        update.on('success', function() {
+            logger.log('info', '%s size updated', name);
+        }).on('error', function(err) {
+            logger.log('error', err);
+        });
+
     }
 
     /**
@@ -382,7 +375,13 @@ var cameraController = function cameraController(io, logger, db, options) {
 
         var imagelog = imagelogFactory.create(data.date, data.image, cameraID, new Date(data.date));
 
-        imagelogDBHelper.add(imagelog);
+        db.save('imagelogs', imagelog)
+            .on('success', function() {
+                logger.log('debug', 'Imagelog message persisted.');
+            })
+            .on('error', function(err) {
+                logger.log('error', err);
+            });;
 
     }
     /**

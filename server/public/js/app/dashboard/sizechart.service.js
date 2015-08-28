@@ -64,9 +64,7 @@ define(['sentinel.app', 'config/config.service'], function(app) {
             return Math.round((value / 1024) * 100) / 100;
         }
 
-        function update(camera) {
-
-            console.log('update', camera.name);
+        function update(camera) {        
 
             if (typeof camera === 'undefined') {              
                 return;
@@ -82,7 +80,6 @@ define(['sentinel.app', 'config/config.service'], function(app) {
                 },
 
                 function(data, responseHeaders) {
-
 
                     console.log('factory', data.config.camera.name);
 

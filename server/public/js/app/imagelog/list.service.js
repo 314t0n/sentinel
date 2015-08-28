@@ -41,9 +41,18 @@ define(['sentinel.app', 'imagelog/imagelog.factory', 'pagination.service'], func
 
                     updateImageGallery(data.imagelogs);
 
-                    $scope.totalItems = (data.count-config.limit) * config.limit;
+                    //$scope.totalItems = (data.count-config.limit) * config.limit;
 
                     $scope.loading = false;
+
+                });
+
+
+            imagelogFactory('/api/v1/imagelog/count').query(params,
+
+                function(data, responseHeaders) {
+
+                    $scope.totalItems = data.count;
 
                 });
 

@@ -45,7 +45,7 @@ define(['sentinel.app', 'notification/notification.factory'], function(app) {
 
                         var i = classes[el.level] || '';
                         el.class = itemClass + i;
-                        el.showImg = typeof el.image !== 'undefined';
+                        el.showImg = typeof el.image !== 'undefined' && el.image !== null && el.image.length > 0;
 
                         return el;
 

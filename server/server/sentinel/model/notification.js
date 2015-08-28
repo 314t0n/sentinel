@@ -14,11 +14,13 @@ var notification = function notification(cam, message, level, image, date) {
     utils.checkParam(message, 'message');
 
     return {
+        _id:null,
         cam: cam,
         message: message,
         level: level || 'info',
-        date: date || getDate(),
-        image: image || null
+        date: date || new Date(),
+        image: image || null,
+        isUnread:true
     }
 
 };

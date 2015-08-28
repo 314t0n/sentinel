@@ -127,7 +127,7 @@ define(['sentinel.app', 'sockets/socket.service', 'config/config.service', 'conf
 
                     } else {
 
-                        toaster.pop('error', 'Hibás azonosító', 'A megadott azonosító már foglalt: ' + $scope.id + "!");
+                        toaster.pop('error', 'Hibás azonosító', 'A megadott azonosító már foglalt: ' + name + "!");
 
                     }
 
@@ -181,7 +181,7 @@ define(['sentinel.app', 'sockets/socket.service', 'config/config.service', 'conf
             });
 
             modalInstance.result.then(function(data) {
-                console.log($scope.camera);
+                console.log($scope.camera._id);
                 $scope.camera.isDeleted = true;
                 cameraFactory.delete({
                     id: $scope.camera._id
@@ -334,6 +334,10 @@ define(['sentinel.app', 'sockets/socket.service', 'config/config.service', 'conf
 
                         $rootScope.$broadcast('camera:update', data.config.camera);
 
+                    }, function(){
+                        console.log('datvót hibaa', data);
+
+                        redirectTo('all');
                     });
 
             });

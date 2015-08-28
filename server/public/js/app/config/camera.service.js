@@ -12,7 +12,7 @@ define(['sentinel.app'], function(app) {
                 method: 'PUT',
                 isArray: false
             },
-            delete: {
+            'delete': {
                 method: 'DELETE',
                 isArray: false
             }

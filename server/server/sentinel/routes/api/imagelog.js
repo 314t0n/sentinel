@@ -9,13 +9,14 @@ var isUndefined = utils.isUndefined;
 var hasKeys = utils.hasKeys;
 
 var logger = require('../../logger').app;
-
-var client = require('../../database/elasticsearch').client;
-var dbHelper = require('../../database/imagelog-helper');
+/*
+var client = require('../../database/elasticsearch').client;*/
+var dbHelper = require('../../database/helpers/imagelog-helper');
+var mongoHelper = require('../../database/helpers/mongo-helper');
 
 var authorizationHelper = require('../../utils').authorizationHelper;
-
-function formatResponse(hits) {
+//legacy @todo move to elastic dao
+/*function formatResponse(hits) {
     return hits.map(function(elem) {
         return {
             cam: elem._source.cam,
@@ -26,16 +27,6 @@ function formatResponse(hits) {
     });
 }
 
-router.get('/', authorizationHelper, function(req, res) {
- 
-    var query = getQuery(req);
-
-    var body = dbHelper.getBody(query);
-
-    logger.log('debug', body);
-    logger.log('debug', query.limit);
-    logger.log('debug', query.offset);
-
     client.search({
         index: 'imagelogs',
         size: query.limit,
@@ -45,14 +36,63 @@ router.get('/', authorizationHelper, function(req, res) {
     }).then(function(resp) {
         var hits = resp.hits.hits;
         /*logger.log('debug', resp);*/
-        res.json({
+/*        res.json({
             imagelogs: formatResponse(hits),
             count: resp.hits.total
         })
     }, function(err) {
         logger.log('error', err.message);
-    });
+    });*/
 
+router.get('/', authorizationHelper, function(req, res) {
+
+    var db = req.elastic || req.db;
+ 
+    var query = getQuery(req);
+
+    var imagelogs = db.query('imagelogs')
+        .filter(mongoHelper.getDateFilter(query))
+        .filter(mongoHelper.getUnreadFilter(query))
+        .filter(mongoHelper.getCameraFilter(query))
+        .pagination({
+            limit: mongoHelper.getLimitFilter(query),
+            skip: mongoHelper.getOffsetFilter(query),
+            sort: mongoHelper.getSortFilter(query),
+        })
+        .all();
+
+    imagelogs
+        .on('success', function(items) {         
+            res.json({
+                imagelogs: items
+            });
+        });
+
+});
+
+router.get('/count', authorizationHelper, function(req, res) {
+
+    var db = req.elastic || req.db;
+ 
+    var query = getQuery(req);
+
+    var imagelogs = db.query('imagelogs')
+        .filter(mongoHelper.getDateFilter(query))
+        .filter(mongoHelper.getUnreadFilter(query))
+        .filter(mongoHelper.getCameraFilter(query))
+        .pagination({
+            limit: mongoHelper.getLimitFilter(query),
+            skip: mongoHelper.getOffsetFilter(query),
+            sort: mongoHelper.getSortFilter(query),
+        })
+        .count();
+
+    imagelogs
+        .on('success', function(items) {         
+            res.json({
+                count: items
+            });
+        });
 
 });
 

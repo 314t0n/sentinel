@@ -39,8 +39,6 @@ function loginResponse(res, user) {
 
     delete user.password;
 
-    logger.log('debug', 'send');
-
     res.json({
         status: 'success',
         user: user,
@@ -57,21 +55,20 @@ function loginResponse(res, user) {
  */
 function loginHandler(req, res) {
 
-    return function(user) {    
+    return function(user) {
 
         if (user) {
 
+            console.log(user);
+
             bcrypt.compare(req.body.password, user.password, function(err, isPassed) {
 
+                console.log(isPassed);
                 if (isPassed) {
-
-                    logger.log("debug", 'Login success');
 
                     loginResponse(res, user);
 
                 } else {
-
-                    logger.log('error', 'wrong pass');
 
                     res.sendStatus(401);
 
@@ -94,16 +91,13 @@ function loginHandler(req, res) {
  */
 router.post('/login', function(req, res) {
 
-    logger.log('debug', 'login');
-
     var db = req.db;
 
-    var users = db.get("users");
-
-    users
-        .findOne({
+    var query = db.query('users').filter({
             email: String(req.body.email)
-        })
+        }).first();
+
+    query
         .on('success', loginHandler(req, res))
         .on('error', errorResponse(res));
 
@@ -111,31 +105,24 @@ router.post('/login', function(req, res) {
 
 router.post('/authenticate', authorizationHelper, function(req, res) {
 
-    logger.log('debug', 'auth');
-    logger.log('debug', 'token: %s', req.token);
-
     var decode = jwt.verify(req.token, 'secret', function(err, decoded) {
 
-        if (err !== null)
+        if (err !== null) {
             res.sendStatus(403);
+            return;
+        }
 
         var db = req.db;
 
-        var users = db.get("users");
+        var query = db.query('users').filter({
+            email: decoded.email
+        }).first();
 
-        users
-            .findOne({
-                email: decoded.email
-            })
+        query
             .on('success', function(user) {
-                logger.log('debug', 'success');
 
-                delete user.password;
-
-                res.json({
-                    status: 'success',
-                    user: user
-                });
+                logger.log('debug', '[%s] successfully logged in!', user.email);
+                sendUserData(res, user);
 
             })
             .on('error', errorResponse(res));
@@ -144,8 +131,18 @@ router.post('/authenticate', authorizationHelper, function(req, res) {
 
 });
 
-// access endpoint
+function sendUserData(res, user) {
+    delete user.password;
 
+    res.json({
+        status: 'success',
+        user: user
+    });
+
+}
+
+// access endpoint
+//@TODO it's the same??
 router.get('/me', authorizationHelper, function(req, res) {
 
     var decode = jwt.verify(req.token, 'secret', function(err, decoded) {
@@ -155,27 +152,23 @@ router.get('/me', authorizationHelper, function(req, res) {
 
         var db = req.db;
 
-        var users = db.get("users");
+        var query = db.query('users').filter({
+            email: decoded.email
+        }).first();
 
-        users
-            .findOne({
-                email: decoded.email
-            })
+        query
             .on('success', function(user) {
 
-                delete user.password;
-
-                res.json({
-                    status: 'success',
-                    user: user
-                });
+                logger.log('debug', '[%s] successfully logged in!', user.email);
+                sendUserData(res, user);
 
             })
             .on('error', errorResponse(res));
+  
     });
 
 });
-
+//@TODO
 router.put('/me', authorizationHelper, function(req, res) {
 
     var decode = jwt.verify(req.token, 'secret', function(err, decoded) {
@@ -188,7 +181,7 @@ router.put('/me', authorizationHelper, function(req, res) {
         var users = db.get("users");
 
         var data = getQuery(req);
- 
+
         users
             .findOne({
                 email: decoded.email
@@ -209,7 +202,7 @@ router.put('/me', authorizationHelper, function(req, res) {
 
                         if (err) logger.log('error', err);
                         res.sendStatus(200);
-           
+
                     });
 
             })

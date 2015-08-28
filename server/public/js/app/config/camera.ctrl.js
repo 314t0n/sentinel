@@ -32,6 +32,7 @@ define(['sentinel.app', 'config/config.service', 'config/camera.service', 'confi
                 $scope.cameras.push({
                     name: 'Mind'
                 });
+
                 Array.prototype.push.apply($scope.cameras, data.cameras);
 
                 // first load  
@@ -53,7 +54,7 @@ define(['sentinel.app', 'config/config.service', 'config/camera.service', 'confi
 
                     $scope.selectedCamera = $scope.cameras[0];
                     $localStorage.camera = $scope.cameras[0];
-                }        
+                }       
 
                 // set statuses false if not declared before
                 initCameraStatuses();
@@ -130,8 +131,6 @@ define(['sentinel.app', 'config/config.service', 'config/camera.service', 'confi
         $scope.update = function() {
 
             $localStorage.camera = $scope.selectedCamera;
-
-            console.log('sele', $scope.selectedCamera.name);
 
             $rootScope.$broadcast('camera:change', $scope.selectedCamera);
 

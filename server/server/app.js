@@ -11,41 +11,20 @@ var auth = require('basic-auth');
 var configs = require('./sentinel/config');
 var utils = require('./sentinel/utils');
 //default
-var config = configs.dev;
+var config = configs.elte;
 var logger = require('./sentinel/logger').app;
 
-process.argv.forEach(function(val, index, array) {
-
-    if (val[0] === '-') {
-
-        var arg = val.split('=');
-
-        if (arg[0] === '-ip') {
-            config.host = arg[1];
-            logger.log('info', 'set ip: %s', config.host);
-        }
-
-        if (arg[0] === '-port') {
-            config.port = arg[1];
-            logger.log('info', 'set port: %s', config.port);
-        }
-
-        if (arg[0] === '-env') {
-
-            var env = arg[1];
-
-            logger.log('info', 'set enviroment: %s', env);
-      
-            if (utils.hasKeys(configs, [env])) {
-                config = configs[env];
-            } else {
-                logger.log('warn', 'no such an enviroment: %s, using dev', env);
-            }
-        }
-
-    }
-
+var argumentHandler = require('./sentinel/utils/argument-handler');
+var db = require('./sentinel/database/middleware');
+var mongoProvider = require('./sentinel/database/concrete/mongo')({
+    url: config.mongo
 });
+
+var sqliteProvider = require('./sentinel/database/concrete/sqlite')({
+    fileName: "sentinel"
+});
+
+var dbProvider = sqliteProvider;
 
 // Sentinel modules
 
@@ -54,18 +33,15 @@ var streamer = require('./sentinel/socket/streamer');
 var camera = require('./sentinel/socket/camera');
 var mdetect = require('./sentinel/socket/motion-detect');
 
-// Database
 
-var db = require('monk')(config.mongo);
-
+// Bootstrap ---------------------------
+//set args in global config object
+argumentHandler.setConfig(config);
+//global var for templates
 app.locals.baseUrl = 'http://' + config.host + ':' + config.port + '/';
 
 // DB connection
-
-app.use(function(req, res, next) {
-    req.db = db;
-    next();
-});
+app.use(db(dbProvider));
 
 // View engine setup
 
@@ -84,17 +60,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '../public')));
 app.use('/bower_components', express.static(path.join(__dirname, '../bower_components')));
 app.use('/js/bower', express.static(path.join(__dirname, '../bower_components')));
-
-// For testing only
-
-var admins = {
-    'x': {
-        password: 'x'
-    },
-    'hajnaldavid@elte.hu': {
-        password: 'almafa1'
-    }
-};
 
 // Header settings
 
@@ -173,7 +138,7 @@ sockets
     .start({
         config: config,
         server: server,
-        db: db,
+        db: dbProvider,
         logger: socketLogger
     })
     .listen(streamer)

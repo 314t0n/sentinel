@@ -1,6 +1,13 @@
-var config = require('./config');
+/**
+ * Module dependencies
+ */
 
-// SocketIO
+var config = require('./config');
+var Promise = require("bluebird");
+var join = Promise.join;
+var _ = require('underscore');
+
+// API
 
 function start(options) {
 
@@ -28,36 +35,37 @@ function start(options) {
         handshake: true
     }));
 
-    var clients = [];
     var sockets = [];
 
     io.on('connection', function(socket) {
 
-        logger.log('info', "[Connection] connecting ...");
-
+        logger.log('info', "[Connection] connecting ... =========================");
+       
         if (socket.handshake.query['phone']) {
-            logger.log('info', "[Connection] PHONE");
-            logger.log('info', "[Connection] PHONE");
-            logger.log('info', "[Connection] PHONE");
             logger.log('info', "[Connection] PHONE");
         }
 
-        if (socket.decoded_token.name !== void 0) {
+        logger.log('info', socket.decoded_token.name || socket.decoded_token.email);
+
+        if (!_.isUndefined(socket.decoded_token.name)) {
 
             logger.log('info', "[Connection] [device] token: [%s]: [%s]", socket.decoded_token.name, socket.handshake.query['id']);
 
-            checkCamera(socket.decoded_token.name, acceptSocket(socket), rejectSocket(socket));
+            var cameraId = socket.decoded_token.name;
+            //creates promise
+            join(getCameras(cameraId), isAllValid).then(socketHandler(socket, 'device'));
 
-        } else if (socket.decoded_token.email !== void 0) {
+        } else if (!_.isUndefined(socket.decoded_token.email)) {
 
             logger.log('info', "[Connection] [user] token: [%s]: [%s]", socket.decoded_token.email, socket.handshake.query['id']);
 
-            checkEmail(socket.decoded_token.email, acceptSocket(socket), rejectSocket(socket));
+            var cameraId = socket.handshake.query['id'];
+            var email = socket.decoded_token.email;
+            //creates promise
+            join(getCameras(cameraId), getUserByEmail(email), isAllValid).then(socketHandler(socket, 'user'));
 
         } else {
-
             rejectSocket(socket)();
-
         }
 
         /*debugConnections();*/
@@ -67,6 +75,28 @@ function start(options) {
     io.on('reconnect_failed', function(socket) {
         logger.log('warn', "[Connection] Reconnecting falid: %s,id %s", socket.decoded_token.name, socket.handshake.query['id']);
     });
+    /**
+     * Handling new socket connections
+     *
+     * @param  {Object} socket new Socket
+     * @param  {String} type   for logging
+     * @return {Function}      
+     */
+    function socketHandler(socket, type) {
+
+        return function(isValid) {
+
+            if (isValid) {
+                logger.log('debug', "[Connection] [user] token: [%s]: [%s] accepted", socket.decoded_token.email, socket.handshake.query['id']);
+                acceptSocket(socket);
+            } else {
+                logger.log('debug', "[Connection] [user] token: [%s], [%s], [%s] rejected", socket.decoded_token.email, socket.handshake.query['id'], socket.decoded_token.name || socket.decoded_token.email);
+                rejectSocket(socket, type);
+            }
+
+        }
+    }
+
     //todo remove prev and close
     function saveSocket(socket) {
 
@@ -74,7 +104,8 @@ function start(options) {
 
         socket.on('disconnect', function() {
             sockets = sockets.map(function(el) {
-                if (el !== socket && typeof el !== 'undefined') {
+                if (el !== socket && !_.isUndefined(el)) {
+                    console.log('socket eltávolítva');
                     return el;
                 }
             });
@@ -82,98 +113,64 @@ function start(options) {
         });
 
     }
-
-    function debugConnections() {
-        var elements = sockets.map(function(el) {
-            try {
-                return '(' + el.id + ';' + el.handshake.query['id'] + ')';
-            } catch (e) {
-
-            }
-        }).join(',');
-        logger.log('debug', '[Sockets]: %s', elements);
-    }
-
-    function checkCamera(name, accept, reject) {
-        getCameras(name)
-            .on('success', function(items) {
-      
-                if (items.length > 0) {
-                    accept();
-                } else {
-                    reject();
-                }
-            })
-            .on('error', reject);
-    }
-
-    function checkEmail(email, accept, reject) {
-        getUsers(email)
-            .on('success', function(items) {
-                if (items.length > 0) {
-                    accept();
-                } else {
-                    reject();
-                }
-            })
-            .on('error', reject);
-    }
-
+    /**
+     * Search for camera by name
+     * @param  {String} camera name
+     * @return {Object}        camera
+     */
     function getCameras(camera) {
 
-        var collection = db.get('camera');
-
-        return collection.find({
-            id: camera,
+        return db.query('camera').filter({
+            name: camera,
             status: true
-        });
+        }).first();
 
     }
+    /**
+     * Search for user by email
+     * @param  {String} email 
+     * @return {Object}      
+     */
+    function getUserByEmail(email) {
 
-    function getUsers(email) {
-
-        var collection = db.get('users');
-
-        return collection.find({
+        return db.query('users').filter({
             email: email
-        });
+        }).first();
 
     }
-
+    /**
+     * Accept actions 
+     * @param  {Object} socket 
+     */
     function acceptSocket(socket) {
-        return function() {
-            logger.log('debug', "[Connection] [%s] successfully authenticated.", socket.handshake.query['id']);
-            saveSocket(socket);
-        }
+        logger.log('debug', "[Connection] [%s] successfully authenticated.", socket.handshake.query['id']);
+    }
+    /**
+     * Reject actions
+     * @param  {Object} socket 
+     * @param  {String} type   for logging    
+     */
+    function rejectSocket(socket, type) {      
+        logger.log('warn', '[Connection] [%s] authentication failed.', type, socket.decoded_token);
+        socket.disconnect();       
+    }
+   
+    function validateItem(item) { 
+        return !_.isUndefined(item) && _.keys(item).length > 0;
     }
 
-    function rejectSocket(socket) {
-        return function() {
-            logger.log('warn', '[Connection] authentication failed.', socket.decoded_token.name);
-            socket.disconnect();
-            socket = null;
-        }
+    function validateItems() {
+        var args = [].slice.call(arguments);  
+        return _(args).chain()
+            .map(validateItem)
+            .value();
     }
 
-    //for debug
-    /*http://stackoverflow.com/questions/6563885/socket-io-how-do-i-get-a-list-of-connected-sockets-clients*/
-    function findClientsSocket(roomId, namespace) {
-        var res = [],
-            ns = io.of(namespace || "/"); // the default namespace is "/"
-
-        if (ns) {
-            for (var id in ns.connected) {
-                if (roomId) {
-                    var index = ns.connected[id].rooms.indexOf(roomId);
-                    if (index !== -1) {
-                        res.push(ns.connected[id]);
-                    }
-                } else {
-                    res.push(ns.connected[id]);
-                }
-            }
-        }
-        return res;
+    function isAllValid() {
+        var validated = validateItems.apply(null, arguments);
+        return _.every(validated, function(v) {
+            return v === true;
+        });
     }
 
     return {

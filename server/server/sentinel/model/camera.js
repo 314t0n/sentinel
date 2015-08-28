@@ -9,10 +9,11 @@ var camera = function camera(name) {
 	utils.checkParam(name, "name");
 
     return {
+        _id: null,
         name: name,
         status: false,
         id: name,
-        isDeleted: false,
+        isDeleted: false,   
         imagelog: {
             status: false,
             storeImage: false,
@@ -29,7 +30,15 @@ var camera = function camera(name) {
         resolution: {
             x: 320,
             y: 240
-        }
+        },
+        fps: 10,
+        size:{}
+        /* 
+        dropbox:{
+            apikey: "undefined",
+            apisecret: "undefined",
+            enabled: false
+        }*/
     }
 }
 

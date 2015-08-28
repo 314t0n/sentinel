@@ -8,6 +8,7 @@ var imagelog = function imagelog(name, image, cam, date) {
     utils.checkParam(date, 'date');
 
     return {
+        _id:null,
         name: name,
         image: image,
         cam: cam,

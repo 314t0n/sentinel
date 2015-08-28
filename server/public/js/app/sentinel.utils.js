@@ -2,7 +2,7 @@
 
 window.SentinelApp = (function($) {
 
-    console.group("SentinelApp v0.5");
+    console.group("SentinelApp v1.1");
 
     var app = {
         

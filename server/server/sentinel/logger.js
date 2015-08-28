@@ -13,6 +13,7 @@ winston.addColors({
 var app = new(winston.Logger)({
     transports: [
         new(winston.transports.Console)({
+           /* handleExceptions: true,*/
             level: 'silly',
             label: "Sentinel.App",
             timestamp: true,
@@ -22,7 +23,7 @@ var app = new(winston.Logger)({
         new(winston.transports.File)({
             name: 'error-file',
             filename: 'logs/streamer-error.log',
-            level: 'debug',
+            level: 'error',
             label: "Sentinel.App",
             timestamp: false,
         })

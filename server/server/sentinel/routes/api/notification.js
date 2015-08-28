@@ -6,7 +6,8 @@ var utils = require('../../utils');
 var isUndefined = utils.isUndefined;
 var hasKeys = utils.hasKeys;
 
-var dbHelper = require('../../database/notification-helper');
+var dbHelper = require('../../database/helpers/notification-helper');
+var mongoHelper = require('../../database/helpers/mongo-helper');
 
 var logger = require('../../logger').app;
 
@@ -14,7 +15,7 @@ var authorizationHelper = require('../../utils').authorizationHelper;
 
 /**
  * Mark All As Read
- *
+ * @todo v1.1
  */
 router.put('/', authorizationHelper, function(req, res) {
 
@@ -26,30 +27,19 @@ router.put('/', authorizationHelper, function(req, res) {
         return;
     }
 
-    var collection = db.get('notifications');
-
-    dbHelper.filter(collection, {
-        isUnread: true
-    }, function(err, items) {
-
-        errorHandler(err);
-
-        items.forEach(function(notification) {
-            notification.isUnread = false;
-            dbHelper.update(db, notification, function(err, items) {
-
-                errorHandler(err);
-
-            });
-
-        });
-
-        res.json({
-            status: err === null ? 'success' : 'failed'
-        });
-
+    var update = db.query('notifications').filter({
+        'isUnread': true
+    }).update({
+        'isUnread': false
     });
 
+    update
+        .on('success', function() {
+
+            res.sendStatus(200);
+
+        })
+        .on('error', errorResponse(res));
 
 });
 
@@ -58,17 +48,20 @@ router.put('/:id', authorizationHelper, function(req, res) {
     var db = req.db;
     var data = req.body;
 
-    logger.log('debug', 'put');
-
-    dbHelper.update(db, data, function(err, items) {
-
-        errorHandler(err);
-
-        res.json({
-            status: err === null ? 'success' : 'failed'
-        });
-
+    var update = db.query('notifications').filter({
+        '_id': data._id
+    }).update({
+        isUnread: data.isUnread
+      /*  updated: new Date() missing from sqlite todo */
     });
+
+    update
+        .on('success', function() {
+
+            res.sendStatus(200);
+
+        })
+        .on('error', errorResponse(res));
 
 });
 
@@ -77,18 +70,24 @@ router.get('/', authorizationHelper, function(req, res) {
     var db = req.db;
     var query = getQuery(req);
 
-    var collection = db.get('notifications');
+    var notifications = db.query('notifications')
+        .filter(mongoHelper.getDateFilter(query))
+        .filter(mongoHelper.getUnreadFilter(query))
+        .filter(mongoHelper.getCameraFilter(query))
+        .pagination({
+            limit: mongoHelper.getLimitFilter(query),
+            skip: mongoHelper.getOffsetFilter(query),
+            sort: mongoHelper.getSortFilter(query),
+        })
+        .all();
 
-    dbHelper.filter(collection, query, function(err, items) {
-
-        errorHandler(err);
-
-        res.json({
-            status: err === null ? 'success' : 'failed',
-            notifications: items
-        });
-
-    });
+    notifications
+        .on('success', function(items) {
+            res.json({
+                notifications: items
+            });
+        })
+        .on('error', errorResponse(res));
 
 });
 
@@ -96,17 +95,22 @@ router.get('/count', authorizationHelper, function(req, res) {
 
     var db = req.db;
     var query = getQuery(req);
-    var collection = db.get('notifications');
 
-    dbHelper.count(collection, query, function(err, count) {
+    console.log('count');
 
-        errorHandler(err);
+    var notifications = db.query('notifications')
+        .filter(mongoHelper.getDateFilter(query))
+        .filter(mongoHelper.getUnreadFilter(query))
+        .filter(mongoHelper.getCameraFilter(query))
+        .count();
 
-        res.json({
-            status: err === null ? 'success' : 'failed',
-            count: count
-        });
-    });
+    notifications
+        .on('success', function(value) {
+            res.json({
+                count: value
+            });
+        })
+        .on('error', errorResponse(res));
 
 });
 
@@ -116,11 +120,18 @@ function getQuery(req) {
     var url_parts = url.parse(req.url, true);
     return url_parts.query;
 }
-
+//@TODO
 function errorHandler(err) {
 
     if (err) {
         logger.log('error', err);
     }
 
+}
+//@TODO
+function errorResponse(res) {
+    return function(err) {
+        logger.log("error", err);
+        res.sendStatus(500);
+    }
 }
